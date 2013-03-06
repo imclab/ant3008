@@ -10,6 +10,10 @@
 <script src="js/jquery.js"></script>
 <script src="js/showdown.js" type="text/javascript"></script>
 
+<link rel="stylesheet" href="css/github.css">
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
@@ -30,8 +34,24 @@ Processing focuses on creating "images, animations, and interactions" within an 
 
 It is one of the most widely used platforms for digital visual arts and creative coding projects today. It is multi-OS and can run in a web browser, it has been extended with many great libraries, integrates well with [Arduino](http://www.arduino.cc/) for hardware sensors, and has been [ported to JavaScript](http://processingjs.org/) for better integration in today's browsers.
 
+An example program:
 
+```
+// initialize the program:
+void setup() {
+	// use a 480x120 pixel canvas:
+	size(480, 120);
+}
 
+// how & what to render:
+void draw() {
+	// make any newly drawn objects be filled with color 255 (white)
+	fill(255);
+	// draw a square of 80x80 pixels size, 
+	// starting from the current mouse position:
+	rect(mouseX, mouseY, 80, 80);
+}
+```
 
 ----
 
