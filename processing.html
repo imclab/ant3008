@@ -34,7 +34,30 @@ Processing focuses on creating "images, animations, and interactions" within an 
 
 It is one of the most widely used platforms for digital visual arts and creative coding projects today. It is multi-OS and can run in a web browser, it has been extended with many great libraries, integrates well with [Arduino](http://www.arduino.cc/) for hardware sensors, and has been [ported to JavaScript](http://processingjs.org/) for better integration in today's browsers.
 
-An example program:
+### Getting Processsing
+
+Processing is the open software and supports cross-platform. Please download and install from [http://processing.org/](http://processing.org/).
+
+If you have any problems installing it, you can always try [running it in the browser](http://sketch.processing.org/) -- not everything will work, but enough to get started.
+
+### Support materials and references
+
+Two recommended textbooks:
+
+- *Getting Started with Processing*  
+Casey Reas and Ben Fry. Published June 2010, O'Reilly Media. 208 pages. Paperback.
+- *Learning Processing: A Beginner's Guide to Programming Images, Animation, and Interaction*  
+Daniel Shiffman. Published August 2008, Morgan Kaufmann. 450 pages. Paperback.
+
+In addition there are numerous help, tutorial, example and reference files in the Processing software, on the [Processing website](http://www.processing.org) and [elsewhere](http://www.google.com). There are huge amounts of example code and projects available on [OpenProcessing](http://openprocessing.org/) for example.
+
+----
+
+# Getting Started
+
+Take a look at the first [Processing tutorial](http://www.processing.org/learning/gettingstarted/) -- this is also linked from the Processing Help menu. 
+
+Here's our first program. In processing, programs are also known as *sketches*:
 
 ```
 // initialize the program:
@@ -53,22 +76,70 @@ void draw() {
 }
 ```
 
-----
+- **Don't copy & paste code**: type it by hand! Doing things by hand requires full attention to detail and develops vital subconscious skills; these will help you enormously when you start inventing your own projects.
 
-### Getting Processsing
+- **Watch out for punctuation**: especially the three different kinds of brackets ```() {} []``` and the semicolon ```;``` at the end of each line!
 
-Processing is the open software and supports cross-platform. Please download and install from [http://processing.org/](http://processing.org/).
+If you make a mistake, the program will probably fail to run (or if you get lucky, it might run and do something unexpected...). A message will display in the *console* area, which might help you find the error.
 
-### Support materials and references
+- Be careful to **indent the code properly**. Indent any lines between a block start curly bracket ```{``` and a block end curly bracket ```}```. You can use *Tools->Auto Format* (or command-T keys) to do this automatically.  
 
-Two recommended textbooks:
+- **Put comments in your code** to explain what it does, and why. Any line can be a comment by adding two slashes: ```//```
 
-- *Getting Started with Processing*  
-Casey Reas and Ben Fry. Published June 2010, O'Reilly Media. 208 pages. Paperback.
-- *Learning Processing: A Beginner's Guide to Programming Images, Animation, and Interaction*  
-Daniel Shiffman. Published August 2008, Morgan Kaufmann. 450 pages. Paperback.
+Your code will still work even if you don't indent it propery or add comments, but you will have a far more difficult time understanding what it does when you look at it again a week or two later, or if you show it to somebody else (e.g. the professors...) Many wise programmers say: **"code is more often read than written"**. 
 
-In addition there are numerous help, tutorial, example and reference files in the Processing software, on the [Processing website](http://www.processing.org) and [elsewhere](http://www.google.com).
+## What does it mean? 
+
+### What is *setup* and *draw*?
+
+We can see there are two parts to our program; the first part goes ```void setup()...``` and the second part goes ```void draw()...```. These parts of the program are called **functions**, because they describe what the program can do ("how it functions"). The function called ```draw``` makes sense; Processing is primarily an environment for making programs that draw graphics. The function called ```setup``` does whatever work is needed in order to start drawing; in this case it defines the size of the canvas. 
+
+> A function collects a series of **instructions** together in a sequence, rather like a recipe. So the ```draw``` function is a recipe for making images. To actually make this happen, a function must be *called*. *Calling* a function makes the program perform the instructions it contains: 'hey, ```draw``` function, it's time to do your work!' Sometimes programmers use different words to mean the same thing; *calling* a function is also known as *running* it, *invoking* it, *triggering* it, and so on.
+
+The ```setup``` and ```draw``` function names have special meaning in Processing; they will be automatically *called* by the Processing environment at special times, so you don't have to:
+
+- when a program (sketch) starts, Processing calls the ```setup``` function once.
+- after that, Processing calls the ```draw``` function several times a second, so that we can make moving images just like animators do.
+	
+> These special kinds of functions are called *callbacks*, because they are the places where Processing "calls back" into your code.
+
+### What does ```setup``` do?
+
+In our program, the ```setup``` function calls the ```size``` function, with parameters ```480``` and ```120```. 
+
+Where is ```size``` defined? It is a **built-in** function, which is predefined by Processing before your program even starts. There are lots and lots of built-in functions, for all kinds of purposes. They are the basic ingredients for a recipe, and they are all listed online in the [Processing Language API](http://www.processing.org/reference/). 
+
+Let's look there to see what ```size``` means. We can either search for it manually in the list, or we can select and right-click on the word ```size``` and choose **Find in Reference**. 
+
+There's a lot of information there, because although we start simple, Processing can get quite powerful; but usually the most important parts are *Description*, *Syntax* and *Parameters*. The syntax tells us the correct ways(s) to write the function, and the parameters explain how to make the function behave in different ways. 
+
+Here are the important parts:
+
+> **Description:** Defines the dimension of the display window in units of pixels... 
+> **Syntax:** ```size(w, h)```
+> **Parameters:** ```w``` int: width of the display window in units of pixels
+> **Parameters:** ```h``` int: height of the display window in units of pixels
+
+OK, so for our code, ```size(480, 120);```, the ```480``` corresponds to ```w``` and ```120``` corresponds to ```h``` in the syntax.  So, our ```size(480, 120);``` means:
+
+> Define the dimension of the display with a height of 480 pixels and 120 pixels
+
+Great. Putting that all together we have our ```setup``` *callback*, which is automatically called by Processing when the program starts, and when that happens it defines the window as 480 by 120 pixels in size.
+
+### What does ```draw``` do?
+
+In our program, the ```draw``` function calls ```fill(255);``` and then ```rect(mouseX, mouseY, 80, 80);```. Again, both of these functions are built-in to Processing, and we can look up what they mean in the reference. 
+
+The ```fill``` function "sets the color used to fill shapes". The matching syntax it uses here is ```fill(gray)```, where gray in this case is 255, which is a "number specifying value between white and black". In Processing, ```0``` is black, ```255``` is white, and numbers in between are different shades of gray. 
+
+So ```fill(255);``` sets the color used to fill shapes to be white. That means, any objects drawn after this call will have white filling.
+
+The ```rect(...)``` function "draws a rectangle to the screen", and the parameters set the 'x' (horizontal) and 'y' (vertical) coordinates (position), and the width and height, of the rectangle. In our code then, the width and height are set to 80 pixels, and the position is set to whatever the value of ```mouseX``` and ```mouseY``` is. Again, we can look these up in the reference: "The system *variable* ```mouseX``` always contains the current horizontal coordinate of the mouse".
+
+### What is a *variable*?
+
+
+
 
 </div>
 <div id="wrapper">
