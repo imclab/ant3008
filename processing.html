@@ -62,17 +62,17 @@ Here's our first program. In processing, programs are also known as *sketches*:
 ```
 // initialize the program:
 void setup() {
-	// use a 480x120 pixel canvas:
-	size(480, 120);
+  // use a 720x480 pixel canvas:
+  size(720, 480);
 }
 
 // how & what to render:
 void draw() {
-	// make any newly drawn objects be filled with color 255 (white)
-	fill(255);
-	// draw a square of 80x80 pixels size, 
-	// starting from the current mouse position:
-	rect(mouseX, mouseY, 80, 80);
+  // make any newly drawn objects be filled with color 255 (white)
+  fill(255);
+  // draw a square of 80x80 pixels size, 
+  // starting from the current mouse position:
+  rect(mouseX, mouseY, 80, 80);
 }
 ```
 
@@ -105,7 +105,7 @@ The ```setup``` and ```draw``` function names have special meaning in Processing
 
 ### What does ```setup``` do?
 
-In our program, the ```setup``` function calls the ```size``` function, with parameters ```480``` and ```120```. 
+In our program, the ```setup``` function calls the ```size``` function, with parameters ```720``` and ```480```. 
 
 Where is ```size``` defined? It is a **built-in** function, which is predefined by Processing before your program even starts. There are lots and lots of built-in functions, for all kinds of purposes. They are the basic ingredients for a recipe, and they are all listed online in the [Processing Language API](http://www.processing.org/reference/). 
 
@@ -120,11 +120,11 @@ Here are the important parts:
 > **Parameters:** ```w``` int: width of the display window in units of pixels  
 > **Parameters:** ```h``` int: height of the display window in units of pixels
 
-OK, so for our code, ```size(480, 120);```, the ```480``` corresponds to ```w``` and ```120``` corresponds to ```h``` in the syntax.  So, our ```size(480, 120);``` means:
+OK, so for our code, ```size(720, 480);```, the ```720``` corresponds to ```w``` and ```480``` corresponds to ```h``` in the syntax.  So, our ```size(720, 480);``` means:
 
-> Define the dimension of the display with a height of 480 pixels and 120 pixels
+> Define the dimension of the display with a height of 720 pixels and 480 pixels
 
-Great. Putting that all together we have our ```setup``` *callback*, which is automatically called by Processing when the program starts, and when that happens it defines the window as 480 by 120 pixels in size.
+Great. Putting that all together we have our ```setup``` *callback*, which is automatically called by Processing when the program starts, and when that happens it defines the window as 720 by 480 pixels in size.
 
 ### What does ```draw``` do?
 
@@ -136,12 +136,20 @@ So ```fill(255);``` sets the color used to fill shapes to be white. That means, 
 
 The ```rect(...)``` function "draws a rectangle to the screen", and the parameters set the 'x' (horizontal) and 'y' (vertical) coordinates (position), and the width and height, of the rectangle. In our code then, the width and height are set to 80 pixels, and the position is set to whatever the value of ```mouseX``` and ```mouseY``` is. Again, we can look these up in the reference: "The system *variable* ```mouseX``` always contains the current horizontal coordinate of the mouse".
 
-### What is a *variable*?
+### What is a *system variable*?
 
+A variable is a container for data that can change while a program runs. Even though the data changes, the name of the variable stays the same, and that's how we can use it. The value of ```mouseX``` gets changed automatically by Processing (because it is a *system* variable); the value stored in ```mouseX``` is automatically set to the value of the current mouse horizontal position. 
 
+Try putting ```mouseX``` or ```mouseY``` in the place of other parameters of ```rect()```. Remember though, ```rect``` always needs four parameters, which should be separated by commas, e.g. ```rect(mouseX, mouseY, mouseY, mouseX);```. Since the values of mouseX and mouseY are always numbers, we can also use them wherever we could use numbers. For example, we can add and subtract them. Try this:
 
+```
+	rect(mouseX, mouseY, mouseX + mouseY, mouseX - mouseY);
+```
 
 </div>
+<!--
+We can create other variables in our programs too, and read and change the data they contain. To do this, we need to learn another detail first. In Processing, and many other programming languages, variables also have a **type**, which never changes. The type of a variable defines what *kinds* of data it can contain. For example, **int** type variables always contain integers, which are whole numbers like 0, 1, 2, 3 etc. They cannot contain any other kind of data. So whenever we introduce a new variable name to the program (we *declare* it), we also need to tell Processing what type of data it will contain.
+-->
 <div id="wrapper">
 	
 	<div class="header">
