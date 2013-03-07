@@ -60,19 +60,12 @@ Take a look at the first [Processing tutorial](http://www.processing.org/learnin
 Here's our first program. In processing, programs are also known as *sketches*:
 
 ```
-// initialize the program:
 void setup() {
-  // use a 720x480 pixel canvas:
-  size(720, 480);
+  size(400, 400);
 }
 
-// how & what to render:
 void draw() {
-  // make any newly drawn objects be filled with color 255 (white)
-  fill(255);
-  // draw a square of 80x80 pixels size, 
-  // starting from the current mouse position:
-  rect(mouseX, mouseY, 80, 80);
+  line(100, 250, 300, 250);
 }
 ```
 
@@ -80,34 +73,45 @@ void draw() {
 
 - **Watch out for punctuation**: especially the three different kinds of brackets ```() {} []``` and the semicolon ```;``` at the end of each line!
 
-If you make a mistake, the program will probably fail to run (or if you get lucky, it might run and do something unexpected...). A message will display in the *console* area, which might help you find the error.
+- Be careful to **indent the code properly**. Indent any lines between a block start curly bracket ```{``` and a block end curly bracket ```}```. You can use *Tools->Auto Format* (or command-T keys) to do this automatically. Although the code may work, indenting is really helpful to understand the code, and is a good habit to get into.
 
-- Be careful to **indent the code properly**. Indent any lines between a block start curly bracket ```{``` and a block end curly bracket ```}```. You can use *Tools->Auto Format* (or command-T keys) to do this automatically.  
+We can run this program, or sketch, by clicking on the triangle run button in Processing, or pressing Command-R; it should open a window looking something like this:
 
-- **Put comments in your code** to explain what it does, and why. Any line can be a comment by adding two slashes: ```//```
+![first sketch](img/first_sketch.png) 
 
-Your code will still work even if you don't indent it propery or add comments, but you will have a far more difficult time understanding what it does when you look at it again a week or two later, or if you show it to somebody else (e.g. the professors...) Many wise programmers say: **"code is more often read than written"**. 
+If you make a mistake in writing the code, the program will probably fail to run (or if you get lucky, it might run and do something unexpected...). A message will display in the *console* area, which might help you find the error.
 
 ## What does it mean? 
 
+Maybe you can guess what this does? 
+
 ### What is *setup* and *draw*?
 
-We can see there are two parts to our program; the first part goes ```void setup()...``` and the second part goes ```void draw()...```. These parts of the program are called **functions**, because they describe what the program can do ("how it functions"). The function called ```draw``` makes sense; Processing is primarily an environment for making programs that draw graphics. The function called ```setup``` does whatever work is needed in order to start drawing; in this case it defines the size of the canvas. 
+We can see there are two parts to our program; the first part goes ```void setup()...``` and the second part goes ```void draw()...```. These parts of the program are called **functions**, because they describe what the program can do ("how it functions"). The function called ```draw``` makes sense; Processing is primarily an environment for making programs that draw graphics. The function called ```setup``` does whatever work is needed in order to set up the system to start drawing; in this case it defines the size of the canvas. 
 
-> A function collects a series of **instructions** together in a sequence, rather like a recipe. So the ```draw``` function is a recipe for making images. To actually make this happen, a function must be *called*. *Calling* a function makes the program perform the instructions it contains: 'hey, ```draw``` function, it's time to do your work!' Sometimes programmers use different words to mean the same thing; *calling* a function is also known as *running* it, *invoking* it, *triggering* it, and so on.
-
-The ```setup``` and ```draw``` function names have special meaning in Processing; they will be automatically *called* by the Processing environment at special times, so you don't have to:
+The ```setup``` and ```draw``` function names have special meaning in Processing; they will be automatically *called* by the Processing environment at special times:
 
 - when a program (sketch) starts, Processing calls the ```setup``` function once.
 - after that, Processing calls the ```draw``` function several times a second, so that we can make moving images just like animators do.
-	
-> These special kinds of functions are called *callbacks*, because they are the places where Processing "calls back" into your code.
 
-### What does ```setup``` do?
+So whatever we put inside ```setup``` will happen once when the sketch starts, and whatever we put in ```draw``` will happen whenever Processing updates the canvas. 
 
-In our program, the ```setup``` function calls the ```size``` function, with parameters ```720``` and ```480```. 
+> Technical detail: A function collects a series of **instructions** together in a sequence, rather like a recipe. So the ```draw``` function is a recipe for making images. 
 
-Where is ```size``` defined? It is a **built-in** function, which is predefined by Processing before your program even starts. There are lots and lots of built-in functions, for all kinds of purposes. They are the basic ingredients for a recipe, and they are all listed online in the [Processing Language API](http://www.processing.org/reference/). 
+Let's add some more instructions, more code, into ```draw```:
+
+```
+void setup() {
+  size(400, 400);
+}
+
+void draw() {
+  line(100, 250, 300, 250);
+  line(200, 200, 200, 220);
+}
+```
+
+So what do ```size``` and ```line``` do? They are **built-in** functions, which are predefined by Processing. There are lots and lots of built-in functions, for all kinds of purposes. They are the basic ingredients for a recipe, and they are all listed online in the [Processing Language API](http://www.processing.org/reference/). 
 
 Let's look there to see what ```size``` means. We can either search for it manually in the list, or we can select and right-click on the word ```size``` and choose **Find in Reference**. 
 
@@ -120,31 +124,223 @@ Here are the important parts:
 > **Parameters:** ```w``` int: width of the display window in units of pixels  
 > **Parameters:** ```h``` int: height of the display window in units of pixels
 
-OK, so for our code, ```size(720, 480);```, the ```720``` corresponds to ```w``` and ```480``` corresponds to ```h``` in the syntax.  So, our ```size(720, 480);``` means:
+OK, so for our code, ```size(400, 400);```, the ```400``` corresponds to ```w``` and ```400``` corresponds to ```h``` in the syntax.  So, our ```size(400, 400);``` means:
 
-> Define the dimension of the display with a height of 720 pixels and 480 pixels
+> Define the dimension of the display with a height of 400 pixels and 400 pixels.
 
-Great. Putting that all together we have our ```setup``` *callback*, which is automatically called by Processing when the program starts, and when that happens it defines the window as 720 by 480 pixels in size.
+## But, what's a pixel?
 
-### What does ```draw``` do?
+You can think of it that all graphics rendering in Processing are drawn on good old graph paper. The screen is a grid of *picture elements*, or **pixels** for short, like the boxes in graph paper. Each pixel can have one color. All images you see on the computer are made of pixels. To draw a line, you can *fill in* a row of pixels:
 
-In our program, the ```draw``` function calls ```fill(255);``` and then ```rect(mouseX, mouseY, 80, 80);```. Again, both of these functions are built-in to Processing, and we can look up what they mean in the reference. 
+![Coordinate system](img/coordinates.jpg)
 
-The ```fill``` function "sets the color used to fill shapes". The matching syntax it uses here is ```fill(gray)```, where gray in this case is 255, which is a "number specifying value between white and black". In Processing, ```0``` is black, ```255``` is white, and numbers in between are different shades of gray. 
+> To tell the computer which box to start drawing from, or to finish drawing, you need to identify the box by it's position on the canvas. We use **X** for the horizontal position along the page (the column), and **Y** for the vertical position down the page (the row). Every box has a unique X,Y pair to identify it; this is called the coordinate. Almost all drawing in Processing is defined in terms of **pixel positions (coordinates)** and **pixel sizes (dimensions)**.
+
+There's a great tutorial about this [here](http://www.processing.org/learning/drawing/). 
+
+OK, so now we know that when our program starts, it runs our ```setup``` function, which contains the ```size(400, 400)``` instruction, which creates a canvas that has 400 rows and 400 columns of pixels. 
+
+We can probably make a good guess as to what the ```line``` calls mean too! 
+
+If we check the reference, it says the ```line(...)``` function "draws a line to the screen", and the parameters set the 'x' (horizontal) and 'y' (vertical) coordinates of the start position, followed by the 'x' (horizontal) and 'y' (vertical) coordinates of the end position, of the line. So our first line goes from position 200, 200 to psotion 200, 220. Our second line goes from position 100, 250 to position 300, 250. 
+
+Try changing some of these numbers and running the sketch to see what it does. Drawing like this is part of the reason why the ancestor of Processing was called *Design by Numbers*. 
+
+OK, now we understand what the code is doing, we should add our understanding to our document, by adding *comments*. Any line can be a comment by adding two slashes at the start:
+
+```
+// what to do the when the program first starts up:
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+}
+
+// what to do when the canvas should be drawn:
+void draw() {
+  // draw a line from 100, 250 to 300, 250:
+  line(100, 250, 300, 250);
+  // draw a line from 200, 200 to 200, 220:
+  line(200, 200, 200, 220);
+}
+```
+
+Your code will still work even if you don't indent it propery or add comments, but you will have a far more difficult time understanding what it does when you look at it again a week or two later, or if you show it to somebody else (e.g. the professors...) Many wise programmers say: **"code is more often read than written"**. 
+
+## Algorithmic painter
+
+What else can we draw besides lines? Take a look at the reference to understand the ```rect``` and ```ellipse``` functions. Let's try adding an ellipse:
+
+```
+// what to do the when the program first starts up:
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+}
+
+// what to do when the canvas should be drawn:
+void draw() {
+  // draw a line from 100, 250 to 300, 250:
+  line(100, 250, 300, 250);
+  // draw a line from 200, 200 to 200, 220:
+  line(200, 200, 200, 220);
+  // draw an ellipse centered at 200, 200
+  // with width 300 and height 300:
+  ellipse(200, 200, 300, 300);
+}
+```
+
+Wait -- what happened to our lines?
+
+The problem is that when we draw the ellipse, it *draws over the top* of our lines. Processing draws with the *Painter's algorithm*, which means that each new thing drawn goes over the top of the one before, like oil painting on a canvas. It happened to use because the ```ellipse``` call happens *after* the ```line``` calls in our ```draw``` function (remember, the content of a function is like a recipe; each line happens after the line above it). OK, so we can fix this by changing the order:
+
+
+```
+// what to do the when the program first starts up:
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+}
+
+// what to do when the canvas should be drawn:
+void draw() {
+  // first, draw an ellipse centered at 200, 200
+  // with width 300 and height 300:
+  ellipse(200, 200, 300, 300);
+  
+  // now draw some lines:
+  // draw a line from 100, 250 to 300, 250:
+  line(100, 250, 300, 250);
+  // draw a line from 200, 200 to 200, 220:
+  line(200, 200, 200, 220);
+}
+```
+
+Okay. Can you make a face?
+
+You can add ```smooth();``` to the ```setup``` function, to make the image look nicer, and ```strokeWeight(3);``` in ```setup``` to change the line thickness (weight, as in how hard your pen is pressed...). 
+
+Try using ```fill(0);``` and ```fill(255);``` to paint in black or white, in different places within the ```draw``` function.
+
+> The ```fill``` function "sets the color used to fill shapes". The matching syntax it uses here is ```fill(gray)```, where gray in this case is 255, which is a "number specifying value between white and black". In Processing, ```0``` is black, ```255``` is white, and numbers in between are different shades of gray. 
 
 So ```fill(255);``` sets the color used to fill shapes to be white. That means, any objects drawn after this call will have white filling.
 
-The ```rect(...)``` function "draws a rectangle to the screen", and the parameters set the 'x' (horizontal) and 'y' (vertical) coordinates (position), and the width and height, of the rectangle. In our code then, the width and height are set to 80 pixels, and the position is set to whatever the value of ```mouseX``` and ```mouseY``` is. Again, we can look these up in the reference: "The system *variable* ```mouseX``` always contains the current horizontal coordinate of the mouse".
+Remember, if anything doesn't work, try changing the order, or *commenting it out* by putting ```//``` in front of it.
+
+----
+
+## First Interaction 
+
+Let's bring this to life. Try this:
+
+```
+// what to do the when the program first starts up:
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+  // make the lines look smooth:
+  smooth();
+  // make the lines look fat:
+  strokeWeight(3);
+}
+
+// what to do when the canvas should be drawn:
+void draw() {
+  // paint in white:
+  fill(255);
+  // first draw the head:
+  // an ellipse centered at 200, 200
+  // with width 300 and height 300:
+  ellipse(200, 200, 300, 300);
+  
+  // now draw some features:
+  // paint in black:
+  fill(0);
+  
+  // mouth
+  // draw a rect from 100, 250 
+  // with width 200 and height 20:
+  rect(100, 250, 200, 20);
+  
+  // nose
+  // draw a line from 200, 200 to 200, 220:
+  line(200, 200, 200, 220);
+  
+  // eyes
+  // more ellipses for the eyes:
+  ellipse(130, 150, 80, 80);
+  ellipse(270, 150, 80, mouseY);
+}
+```
+
+At the end, the height of the last two ellipses are set to whatever the value of ```mouseY``` is. Again, we can look it up in the reference: "The system *variable* ```mouseY``` always contains the current horizontal coordinate of the mouse".
 
 ### What is a *system variable*?
 
-A variable is a container for data that can change while a program runs. Even though the data changes, the name of the variable stays the same, and that's how we can use it. The value of ```mouseX``` gets changed automatically by Processing (because it is a *system* variable); the value stored in ```mouseX``` is automatically set to the value of the current mouse horizontal position. 
+> A variable is a container for data that can change while a program runs. Even though the data changes, the name of the variable stays the same, and that's how we can use it. The value of the variable ```mouseY``` gets changed automatically by Processing (because it is a *system* variable); the value stored in ```mouseY``` is automatically set to the value of the current mouse vertical position. 
 
-Try putting ```mouseX``` or ```mouseY``` in the place of other parameters of ```rect()```. Remember though, ```rect``` always needs four parameters, which should be separated by commas, e.g. ```rect(mouseX, mouseY, mouseY, mouseX);```. Since the values of mouseX and mouseY are always numbers, we can also use them wherever we could use numbers. For example, we can add and subtract them. Try this:
+There's ```mouseX``` of course -- see if you can find a good place to use it!
+
+Since the values of ```mouseX``` and ```mouseY``` are always numbers, we can also use them wherever we could use numbers. This means we can do a bit of mathematics with them. For example, we can add and subtract, multiply or divide them. We can use this to make the eyes less sensitive:
 
 ```
-	rect(mouseX, mouseY, mouseX + mouseY, mouseX - mouseY);
+// what to do the when the program first starts up:
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+  // make the lines look smooth:
+  smooth();
+  // make the lines look fat:
+  strokeWeight(3);
+}
+
+// what to do when the canvas should be drawn:
+void draw() {
+  // paint in white:
+  fill(255);
+  // first draw the head:
+  // an ellipse centered at 200, 200
+  // with width 300 and height 300:
+  ellipse(200, 200, 300, 300);
+  
+  // now draw some features:
+  // paint in black:
+  fill(0);
+  
+  // mouth
+  // draw a rect from 100, 250 
+  // with width 200 and height 20:
+  rect(100, 250, 200, mouseX / 10);
+  
+  // nose
+  // draw a line from 200, 200 to 200, 220:
+  line(200, 200, 200, 220);
+  
+  // eyes
+  // more ellipses for the eyes:
+  ellipse(130, 150, 80, mouseY / 5);
+  ellipse(270, 150, 80, mouseY / 5);
+}
 ```
+
+----
+
+# Submitting your work
+
+You can submit your projects to our [classroom page on OpenProcessing](http://www.openprocessing.org/classroom/2619). You'll first need to register with a username (and let us know what your username is!)
+
+To submit a sketch to your OpenProcessing portfolio:
+
+- Go to [OpenProcessing.org](http://www.openprocessing.org/) and sign in.
+- Go to the *my portfolio* page and click on *create new sketch*
+- Copy your Processing code from the Processing editor and paste it into the webpage, and click *save*
+- Add a title and description for the sketch, and again click *save*
+
+To submit one of your portfolio works to the classroom collection:
+
+- Go to [the classroom collection](http://www.openprocessing.org/classroom/2619)
+- Click on the *Select a sketch* button
+- Click on the sketch you want to submit
 
 </div>
 <!--
