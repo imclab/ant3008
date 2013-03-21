@@ -745,52 +745,6 @@ void draw() {
 }
 ```
 
-We could take this idea further by making the worm remember X and Y position, rather than length, and allowing it to wander like a robot dragging a rubber stamp:
-
-
-```
-float robotx;
-float roboty;
-float robota;
-
-void setup() {
-  size(300, 600); 
-  robotx = width/2;
-  roboty = height/2;
-  robota = 0;
-}
-
-void drawRobot() {
-  rect(-10, -10, 20, 20, 4);
-  point(-4, -2);
-  point(4, -2);
-  line(-4, 4, 4, 4);
-}
-
-void draw() {
-  //background(200);
-  
-  // move the robot
-  robotx = robotx + random(-3, 3);
-  roboty = roboty + random(-3, 4);
-  robota = robota + radians(random(-12, 12));
-  
-  if (roboty > height) {
-     roboty = 0;
-  }
-  
-  translate(robotx, roboty);
-  rotate(robota);
-  scale(random(1, 1.2));
-  drawRobot();
-}
-
-void mouseClicked() {
-  robotx = mouseX;
-  roboty = mouseY;
-}
-```
-
 ### Transformers of transformers
 
 The ```translate``` command isn't the only way to change the coordinate system (the underlying graph paper...). We can also change the size of the coordinate system (graph paper) with the ```scale``` command, and rotate with the ```rotate``` command. 
@@ -812,9 +766,56 @@ You can always convert a number in degrees to a number in radians using the ```r
 	rotate( radians( random(-45, 45) ) );
 ```
 
+Here's an example of combining transformations together with some of the user-variable concepts from the worm, but making it remember X and Y position and direction, rather than length; and allowing it to wander like a robot dragging a rubber stamp:
+
+```
+// robot has a X and Y position, and direction angle:
+float robotx;
+float roboty;
+float robota;
+
+void setup() {
+  size(300, 600); 
+  
+  // initialize robot variables
+  robotx = width/2;
+  roboty = height/2;
+  robota = 0;
+}
+
+void draw() {
+  // move the robot
+  robotx = robotx + random(-3, 3);
+  roboty = roboty + random(-3, 4);
+  robota = robota + radians(random(-12, 12));
+  
+  // what to do if robot leaves bottom edge:
+  if (roboty > height) {
+     roboty = 0;
+  }
+  
+  // transform Processing into a robot-centric space:
+  translate(robotx, roboty);
+  rotate(robota);
+  scale(random(1, 1.2));
+  
+  // draw robot:
+  rect(-10, -10, 20, 20, 4);
+  point(-4, -2);
+  point(4, -2);
+  line(-4, 4, 4, 4);
+}
+
+void mouseClicked() {
+	// restart robot at mouse position
+	robotx = mouseX;
+	roboty = mouseY;
+}
+```
+
 ### Functions
 
-To draw many different faces at different sizes, positions and rotations, we could copy & paste the draw commands, but that seems like going back to the problem of when you change one, you have to change them all... We can **abstract** a series of commands into a re-usable sequence by creating our own **functions**:
+To draw many different faces or robots at different sizes, positions and rotations, we could copy & paste the draw commands, but that seems like going back to the problem of when you change one, you have to change them all... We can **abstract** a series of commands into a re-usable sequence by creating our own **functions**:
 
 ```lua
 void drawFace() {
@@ -891,7 +892,10 @@ With this we can easily now create ideal visual forms, and then create instances
 
 Cf. Maeda: DBN, reactive drawing; and Haberli's [Dynadraw](http://processing.org/exhibition/works/dynadraw/))
 
-This will be a non-standard drawing program, with some dynamic aspect. For example:
+This will be a non-standard drawing program, with some dynamic aspect. 
+
+For example:
+
 - Chooses different brushes from time to time
 - Brushes change shape, or color, etc.
 - Brushes sometimes wander about by themselves
