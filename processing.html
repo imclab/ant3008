@@ -597,58 +597,331 @@ void draw() {
 }
 ```
 
-## Moving around
+# Week 3: Abstraction with transformations and functions
 
+Last week we learned that we can use ```width``` and ```height``` to easily support different canvas resolutions for our growing worm. But what if we want to draw the face from week 1? 
 
+```lua
+void setup() {
+  // create a canvas of 400 wide by 400 high pixels:
+  size(400, 400);
+  
+  // drawing style:
+  smooth();
+  strokeWeight(3);
+}
 
-# Transformations
+void draw() {
+  // paint in white:
+  fill(255);
+  // head:
+  ellipse(200, 200, 300, 300);		
+  
+  // paint in black:
+  fill(0);
+  // mouth
+  rect(100, 250, 200, 20);
+  // nose
+  line(200, 200, 200, 220);
+  // eyes
+  ellipse(130, 150, 80, 80);
+  ellipse(270, 150, 80, 80);
+}
+```
 
-We'll learn about transformations (translations, rotations, scaling) from the tutorial online: [Transform2D tutorial](http://processing.org/learning/transform2d/)
+Each one of these drawing commands needs to be modified into expressions of ```width``` and ```height```, which is a bit silly. And what if we wanted the face to move around the canvas, maybe like the worm, or maybe following the mouse? The code would get really complicated:
 
-Now let's combine that with what we learned about variables:
+```lua
+void draw() {
+	// paint in white:
+	fill(255);
+	// head:
+	ellipse(width/2, height/2, 300, 300);		
+	
+	// paint in black:
+	fill(0);
+	// mouth
+	rect(width/2 - 100, height/2 + 50, 200, 20);
+	// nose
+	line(width/2, height/2, width/2, height/2 + 20);
+	// eyes
+	ellipse(width/2 - 70, height/2 - 50, 80, 80);
+	ellipse(width/2 + 70, height/2 - 50, 80, 80);
+}
+```
+
+Or to follow the mouse, as a 'face painter':
+
+```lua
+void draw() {
+	// paint in white:
+	fill(255);
+	// head:
+	ellipse(mouseX, mouseY, 300, 300);		
+	
+	// paint in black:
+	fill(0);
+	// mouth
+	rect(mouseX - 100, mouseY + 50, 200, 20);
+	// nose
+	line(mouseX, mouseY, mouseX, mouseY + 20);
+	// eyes
+	ellipse(mouseX - 70, mouseY - 50, 80, 80);
+	ellipse(mouseX + 70, mouseY - 50, 80, 80);
+}
+```
+
+### Translations of space
+
+Processing offers a much simpler way of doing this:
+
+```lua
+void draw() {
+	// move to the center of canvas:
+	translate(width/2, height/2);
+	
+	// paint in white:
+	fill(255);
+	// head:
+	ellipse(0, 0, 300, 300);		
+	
+	// paint in black:
+	fill(0);
+	// mouth
+	rect(-100, 50, 200, 20);
+	// nose
+	line(0, 0, 0, 20);
+	// eyes
+	ellipse(-70, -50, 80, 80);
+	ellipse( 70, -50, 80, 80);
+}
+```
+
+You could think of ```translate``` as meaning changing the 'start point' (in mathematical terms, the *"origin"*) of drawing. Or you could think of it as moving the underlying "graph paper" that we are drawing onto, like in the Processing.org [Transform2D tutorial](http://processing.org/learning/transform2d/). 
+
+> The word *translate* is also taken from mathematics; it *translates* points in one space (such as Processing drawing commands) to points in another space (such as the pixels on screen). 
+
+Notice that ```width``` and ```height``` are only used once. The more drawing we do, the more useful this is. If we are drawing a complex object using lots of drawing commands, all the positions will be *relative* to the center of the object, rather than  to the top-left corner of the screen. And now it's really easy to change -- for example, we could try using ```translate(mouseX, mouseY)``` instead. 
+
+Or maybe re-use something from our worm:
+
+```lua
+int wormsize;
+
+void setup() {
+	size(800, 600);
+	wormsize = 1;
+}
+
+void draw() {
+	// reset or grow worm:
+	if (wormsize > width) {
+		// worm reached the end, reset to initial value:
+		background();
+		wormsize = 1;
+	} 
+	else {
+		// growth: the new wormsize will be the old wormsize plus one:
+		wormsize = wormsize + 1;
+	}
+
+	// move to the worm position:
+	translate(wormsize, height/2);
+	
+	// paint in white:
+	fill(255);
+	// head:
+	ellipse(0, 0, 300, 300);		
+	
+	// paint in black:
+	fill(0);
+	// mouth
+	rect(-100, 50, 200, 20);
+	// nose
+	line(0, 0, 0, 20);
+	// eyes
+	ellipse(-70, -50, 80, 80);
+	ellipse( 70, -50, 80, 80);
+}
+```
+
+### Transformers of transformers
+
+The ```translate``` command isn't the only way to change the coordinate system (the underlying graph paper...). We can also change the size of the coordinate system (graph paper) with the ```scale``` command, and rotate with the ```rotate``` command. 
+
+The ```scale``` command scales all positions and lengths that come after it, and the ```rotate``` command rotates all positions that come after it around the current origin. It's easier to understand this by making it.
+
+Try putting ```scale(0.25);``` after the ```translate``` command in the face-worm sketch above; notice how the face got 25% smaller.
+
+Rotations are a little trickier; like most programming languages, Processing measures angles in **radians** rather than **degrees**. This makes a lot of math much easier, but isn't so intuitive if you've never used radians before. 
+
+![Radians](img/UnitCircle.png)
+
+> There are 360 degrees in a circle. There are 2*Pi radians in a circle. So 180 degrees == Pi radians, 90 degrees == Pi/2 radians, etc. What is Pi? Pi is the ratio of the diameter of a circle (the distance between opposite edges) and the circumference (the distance around the border). It is a strange but incredibly important number whose value is roughly 3.141592653589793... 
+
+You can always convert a number in degrees to a number in radians using the ```radians``` function, like this:
+
+```lua
+	// pick a random angle between -45 degrees and +45 degrees
+	// convert this into radians
+	// and use it to rotate all future drawing commands:
+	rotate( radians( random(-45, 45) ) );
+```
+
+Here's an example of combining transformations together with some of the user-variable concepts from the worm, but making it remember X and Y position and direction, rather than length; and allowing it to wander like a robot dragging a rubber stamp:
 
 ```
+// robot has a X and Y position, and direction angle:
 float robotx;
 float roboty;
 float robota;
 
 void setup() {
   size(300, 600); 
+  
+  // initialize robot variables
   robotx = width/2;
   roboty = height/2;
   robota = 0;
 }
 
-void drawRobot() {
+void draw() {
+  // move the robot
+  robotx = robotx + random(-3, 3);
+  roboty = roboty + random(-3, 4);
+  robota = robota + radians(random(-12, 12));
+  
+  // what to do if robot leaves bottom edge:
+  if (roboty > height) {
+     roboty = 0;
+  }
+  
+  // transform Processing into a robot-centric space:
+  translate(robotx, roboty);
+  rotate(robota);
+  scale(random(1, 1.2));
+  
+  // draw robot:
   rect(-10, -10, 20, 20, 4);
   point(-4, -2);
   point(4, -2);
   line(-4, 4, 4, 4);
 }
 
-void draw() {
-  //background(200);
-  
-  robotx = robotx + random(-3, 3);
-  roboty = roboty + random(-3, 4);
-  robota = robota + radians(random(-12, 12));
-  
-  if (roboty > height) {
-     roboty = 0;
-  }
-  
-  translate(robotx, roboty);
-  rotate(robota);
-  scale(random(1, 1.2));
-  drawRobot();
-}
-
 void mouseClicked() {
-  robotx = mouseX;
-  roboty = mouseY;
+	// restart robot at mouse position
+	robotx = mouseX;
+	roboty = mouseY;
 }
 ```
 
+### Functions
+
+To draw many different faces or robots at different sizes, positions and rotations, we could copy & paste the draw commands, but that seems like going back to the problem of when you change one, you have to change them all... We can **abstract** a series of commands into a re-usable sequence by creating our own **functions**:
+
+```lua
+void drawFace() {
+	// paint in white:
+	fill(255);
+	// head:
+	ellipse(0, 0, 300, 300);		
+	
+	// paint in black:
+	fill(0);
+	// mouth
+	rect(-100, 50, 200, 20);
+	// nose
+	line(0, 0, 0, 20);
+	// eyes
+	ellipse(-70, -50, 80, 80);
+	ellipse( 70, -50, 80, 80);
+}
+```
+
+And now we can use this function to draw many faces:
+
+```lua
+void draw() {
+	// start drawing at middle of screen
+	translate(width/2, height/2);
+	// scale down to 10%:
+	scale(0.1);
+	
+	// draw a face:
+	drawFace();
+	
+	// move to the right & draw another face:
+	translate(100, 0);
+	drawFace();
+	
+	// move to the right & draw another face:
+	translate(100, 0);
+	drawFace();
+	
+	// move to the right & draw another face:
+	translate(100, 0);
+	drawFace();
+	
+	// move to the right & draw another face:
+	translate(100, 0);
+	drawFace();
+}
+```
+
+Notice how the transforms accumulate. (Try replacing the 100's with mouseX, or seconds(), or random(), or a variable of your own, like wormsize...)
+
+### The matrix of transformations
+
+Obviously there's some hidden state at work here.
+
+> We met hidden state already with the ```fill``` and ```stroke``` functions. When we set ```fill(100)```, everything we draw will be filled with dark grey until the next ```fill``` call changes the *fill color*. Processing carries this *fill color*, and several other hidden state parameters, around with it as it runs our sketches. Processing has a lot of these hidden state parameters, and we have to keep that in mind when trying to understand what our sketches are doing. In a way, changing hidden state changes how Processing works into a different program: calling ```fill(255)``` turns Processing into a white-filling program for a while. Calling ```translate(width/2, height/2)``` turns Processing into a program that draws relative to the center of the canvas. 
+
+*However*, ```translate```, ```scale``` and ```rotate``` do not replace the previous values; instead they accumulate on top of each other into a hidden state called the **transformation matrix**, which is a fancy name for how we get from the coordinate system in which we are currently drawing to the coordinate system of the actual output pixels.
+
+Try putting ```scale(0.25);``` before or after the ```translate``` command in the face-worm sketch. Notice that if the ```scale``` comes first, it also scales the ```translate```! Or try adding ```translate(random(-3, 3), random(-3, 3))``` after or before the other ```translate```, and see what that does. We're about ready for some generative design...
+
+On the other hand, what if we didn't want to accumulate? We could manually do the opposite transform (e.g. translate-left followed by translate-right), but wouldn't it be easier if we could tell Processing to just "forget" the last few transformations?
+
+### Push and pop
+
+How can we 'undo' a transformation and get back to the original system? In Processing we can do this using the ```pushMatrix()``` and ```popMatrix()``` commands. Each *push* remembers the *transformation matrix* when it is called, and at the next *pop* this *transformation matrix* is restored.
+
+With this we can easily now create ideal visual forms, and then create instances of these forms with different position, scale and rotation, however we please. We'll come back to this idea next week.
+
+> Also see the L-System and Robot Arms in the Processing Examples
+
+## Assignment 3: build an ANTustrator. 
+
+Cf. Maeda: DBN, reactive drawing; and Haberli's [Dynadraw](http://processing.org/exhibition/works/dynadraw/))
+
+This will be a non-standard drawing program, with some dynamic aspect. 
+
+For example:
+
+- Chooses different brushes from time to time
+- Brushes change shape, or color, etc.
+- Brushes sometimes wander about by themselves
+- Brushes orbit the mouse in some way
+- Brushes have child brushes and grandchild brushes that orbit their parents
+- Etc.
+- You could make changes of behavior when the mouse is clicked or keys are pressed. 
+
+Here's a tip: if you want the background to slowly fade out, add this at the start of your draw():
+
+```lua
+void draw() {
+	// set fill color to be partly transparent:
+	fill(200, 100);
+	// draw a rect over everything:
+	rect(0, 0, width, height);
+	// set the fill color to be opaque again:
+	fill(100);
+	
+	// draw stuff here:
+	// 
+	//
+}
+```
 
 ----
 
