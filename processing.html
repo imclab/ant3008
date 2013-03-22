@@ -601,7 +601,7 @@ void draw() {
 
 Last week we learned that we can use ```width``` and ```height``` to easily support different canvas resolutions for our growing worm. But what if we want to draw the face from week 1? 
 
-```lua
+```java
 void setup() {
   // create a canvas of 400 wide by 400 high pixels:
   size(400, 400);
@@ -631,7 +631,7 @@ void draw() {
 
 Each one of these drawing commands needs to be modified into expressions of ```width``` and ```height```, which is a bit silly. And what if we wanted the face to move around the canvas, maybe like the worm, or maybe following the mouse? The code would get really complicated:
 
-```lua
+```java
 void draw() {
 	// paint in white:
 	fill(255);
@@ -652,7 +652,7 @@ void draw() {
 
 Or to follow the mouse, as a 'face painter':
 
-```lua
+```java
 void draw() {
 	// paint in white:
 	fill(255);
@@ -675,7 +675,7 @@ void draw() {
 
 Processing offers a much simpler way of doing this:
 
-```lua
+```java
 void draw() {
 	// move to the center of canvas:
 	translate(width/2, height/2);
@@ -705,7 +705,7 @@ Notice that ```width``` and ```height``` are only used once. The more drawing we
 
 Or maybe re-use something from our worm:
 
-```lua
+```java
 int wormsize;
 
 void setup() {
@@ -760,7 +760,7 @@ Rotations are a little trickier; like most programming languages, Processing mea
 
 You can always convert a number in degrees to a number in radians using the ```radians``` function, like this:
 
-```lua
+```java
 	// pick a random angle between -45 degrees and +45 degrees
 	// convert this into radians
 	// and use it to rotate all future drawing commands:
@@ -818,7 +818,7 @@ void mouseClicked() {
 
 To draw many different faces or robots at different sizes, positions and rotations, we could copy & paste the draw commands, but that seems like going back to the problem of when you change one, you have to change them all... We can **abstract** a series of commands into a re-usable sequence by creating our own **functions**:
 
-```lua
+```java
 void drawFace() {
 	// paint in white:
 	fill(255);
@@ -839,7 +839,7 @@ void drawFace() {
 
 And now we can use this function to draw many faces:
 
-```lua
+```java
 void draw() {
 	// start drawing at middle of screen
 	translate(width/2, height/2);
@@ -887,6 +887,46 @@ How can we 'undo' a transformation and get back to the original system? In Proce
 
 With this we can easily now create ideal visual forms, and then create instances of these forms with different position, scale and rotation, however we please. We'll come back to this idea next week.
 
+We can also use ```pushMatrix()``` and ```popMatrix()``` to create hierarchical structures. For example:
+
+```java
+void setup() {
+	size(600, 400); 
+	noStroke();
+}
+
+void draw() {
+	// draw brush from perspective of mouse:
+	translate(mouseX, mouseY); 
+	
+	fill(255, 100);
+	
+	// draw individual blobs of paint:
+	if (mousePressed) {
+		splitter();
+		splitter();
+		splitter();
+	}
+}
+
+void splitter() {
+	pushMatrix();
+	translate(random(-5, 5), random(-5, 5));
+	ellipse(0, 0, 10, 10);
+	splatter();
+	splatter();
+	splatter();
+	popMatrix();
+}
+
+void splatter() {
+	pushMatrix();
+	translate(random(-5, 5), random(-5, 5));
+	ellipse(0, 0, 4, 4);
+	popMatrix();
+}
+```
+
 > Also see the L-System and Robot Arms in the Processing Examples
 
 ## Assignment 3: build an ANTustrator. 
@@ -907,7 +947,7 @@ For example:
 
 Here's a tip: if you want the background to slowly fade out, add this at the start of your draw():
 
-```lua
+```java
 void draw() {
 	// set fill color to be partly transparent:
 	fill(200, 100);
