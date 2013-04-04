@@ -963,6 +963,545 @@ void draw() {
 }
 ```
 
+## Data by drawing
+
+This week we'll see if we can figure out how to create something like the *YellowTail* project. We already know how to make a drawing program, but we have a big problem: in YellowTail the drawings can move, which means that they are being redrawn every frame; in our sketch programs we can't do that, because as soon as we call ```background()``` all our previous drawing is lost! 
+
+What we'll need to do is introduce another level of abstraction: we'll store our drawing actions into another kind of memory (we'll use *arrays*), and use that storage to redraw them on every frame. But before we learn about arrays, we need to understand loops.
+
+### Looping
+
+Last time we saw how to use functions to repeat actions (such as our ```splitter()``` and ```splatter()``` actions. But just repeating calls like this is a bit silly:
+
+```java
+println("hello");
+println("hello");
+println("hello");
+println("hello");
+println("hello");
+println("hello");
+```
+
+As usual, there's a way to avoid this kind of repetition. The *syntax* (the way it is written) is strange-looking, but it fits in everything that is needed:
+
+```java
+for (int i = 0; i < 6; i++) {
+	println("hello");
+}
+```
+
+It's a bit like the ```if``` construction; it defines a new block of instructions (inside the ```{``` and ```}``` markers) to perform repeatedly. The ```for``` keyword indicates that this will happen **for** a number of times. Between the ```for``` and the ```{``` sets up how many times to run the loop, and it also gives us an additional variable ```i``` to tell us which time through the loop we are running (the *loop counter*): 
+
+- ```int i = 0;``` sets up the variable ```i``` to be the loop counter, and starts the counter at zero.
+- ```i < 6;``` tells Processing that the for loop is done when ```i``` is not less than 6. 
+- ```i++``` tells Processing to increase the value if ```i``` by 1 after each loop. 
+
+```java
+for (int i = 0; i < 6; i++) {
+	println(i);
+}
+```
+
+This prints out the numbers 0, 1, 2, 3, 4, 5 and then stops. The first time through the loop body, ```i``` is at the initial value of 0. After running the loop body ```i``` is increased by one (because of the ```i++```) and then the condition is checked; since ```i``` is still less than 6 (```i < 6```), the loop body runs again. After a few more runs, ```i``` ends up reaching a value of 6, this condition fails, and the ```for``` loop is done.
+
+Now the great thing is that if we wanted to call the function 100 times, we just need to change the code in one place!
+
+```java
+void setup() {
+  size(256, 256);
+}
+
+void draw() {
+  background(200);
+  // draw lots of lines:
+  for (int i = 0; i < 256; i++) {  
+    // change color by loop index:
+    stroke(i);
+    line(i, 0, i, i);
+  }
+}
+```
+
+Try some variations of that:
+
+- Try using ```line(i, 0, i, random(256))``` instead. Now you can see the individual lines. 
+- Try using ```i < mouseX``` instead of ```i < 256```, to see how the loop limit changes.
+- Instead of ```i++```, try ```i = i + 5```. Then each time through the loop, the value of ```i``` increases by 5, instead of increasing by 1, and the lines get spread out.
+
+Or something more complex:
+
+```java
+void setup() {
+  size(256, 256);
+}
+
+// create a variable to count the frames drawn:
+int frame = 0;
+
+void draw() {
+  // a new frame increases the current frame count:
+  frame = frame + 1;
+
+  background(200);
+  // draw lots of lines:
+  for (int i = 0; i < 256; i += 1) {  
+    // change color by loop index:
+    stroke(i);
+    // calculate an angle that is dependent on time (frame) and loop index (i):
+    float angle = PI * 0.1 * (frame + i);
+    line(i, i, 255 * cos(angle), 255 * sin(angle));
+  }
+}
+```
+
+### Storing data into arrays
+
+For loops are great if we want to perform actions a large number of times, but don't help much when we want to store a large amount of state. Let's look at *variables* again.
+
+If I want to randomize and store the x and y position of a point; I can do this:
+
+```java
+float x;
+float y;
+
+void setup() {
+  x = random(width);
+  y = random(height);
+}
+
+void draw() {
+  ellipse(x, y, 5, 5);
+}
+```
+
+Now if I want to draw four points, I could do this:
+
+```java
+float x1;
+float x2;
+float x3;
+float x4;
+float y1;
+float y2;
+float y3;
+float y4;
+
+void setup() {
+  x1 = random(width);
+  x2 = random(width);
+  x3 = random(width);
+  x4 = random(width);
+  y1 = random(height);
+  y2 = random(height);
+  y3 = random(height);
+  y4 = random(height);
+}
+
+void draw() {
+  background(200);
+  ellipse(x1, y1, 5, 5);
+  ellipse(x2, y2, 5, 5);
+  ellipse(x3, y3, 5, 5);
+  ellipse(x4, y4, 5, 5);
+}
+```
+
+It works, but what a nightmare -- imagine if we wanted to draw 100 points! Arrays were invented to solve just this kind of problem. With an array, we can represent a large number of variables with just one name:
+
+```
+float[] x;
+float[] y;
+```
+
+The ```float[]``` part indicates that x and y are arrays which contain float-type data. *Note that all items in an array have the same type*. So there are arrays-of-ints, arrays-of-floats, etc.
+
+The array also needs to be initialized, to tell it how many elements it contains:
+
+```
+void setup() {
+	x = new float[100];
+}
+```
+
+The ```new``` keyword allocates memory in Processing for the array, and the ```[100]``` tells it that there must be enough space for 100 items. *Note that the ```float``` type must match the declaration type of x.* These can be combined into a single instruction:
+
+```
+float[] x = new float[100];
+```
+
+To read a value from the array, we need to specify what index we are interested in:
+
+```
+// print the value of x at index 10:
+println(x[10]);
+```
+
+It's a bit like the pages of a book. Instead of referring to each page by a different name, you can just use the page number; so to get page ten you write ```pages[10]```.  **Note that, like many things in computer science, arrays index from 0, not from 1. So the first item in x is x[0], the second item is x[1], etc.  If the array length is 100, then the last item is at x[99].**
+
+To store a value into the array, we need to also say which element (at which *index*) to store:
+
+```
+// set the value of x at index 10 to be 123:
+x[10] = 123;
+```
+
+Knowing this, we can rewrite our example above to use arrays:
+
+```java
+float x[] = new float[4];
+float y[] = new float[4];
+
+void setup() {
+  // initialize each point:
+  x[0] = random(width);
+  x[1] = random(width);
+  x[2] = random(width);
+  x[3] = random(width);
+  y[0] = random(height);
+  y[1] = random(height);
+  y[2] = random(height);
+  y[3] = random(height);
+}
+
+void draw() {
+  background(200);
+  // draw each point:
+  ellipse(x[0], y[0], 5, 5);
+  ellipse(x[1], y[1], 5, 5);
+  ellipse(x[2], y[2], 5, 5);
+  ellipse(x[3], y[3], 5, 5);
+}
+```
+
+And we can combine this with for loops to make it even simpler:
+
+```java
+float x[] = new float[4];
+float y[] = new float[4];
+
+void setup() {
+  for (int i = 0; i < 4; i++) {
+    // initialize this point
+    x[i] = random(width);
+    y[i] = random(height);
+  }
+}
+
+void draw() {
+  background(200);
+  for (int i = 0; i < 4; i++) {
+    // draw this point
+    ellipse(x[i], y[i], 5, 5);
+  }
+}
+```
+
+We could also turn the number of elements into a variable, so that it is only ever defined once:
+
+```java
+int elements = 4;
+float x[] = new float[elements];
+float y[] = new float[elements];
+
+void setup() {
+  for (int i = 0; i < elements; i++) {
+    // initialize this point
+    x[i] = random(width);
+    y[i] = random(height);
+  }
+}
+
+void draw() {
+  background(200);
+  for (int i = 0; i < elements; i++) {
+    // draw this point
+    ellipse(x[i], y[i], 5, 5);
+  }
+}
+```
+
+Now it is truly trivial to convert this into a program that draws 10, 100 or 1000 points!
+
+And also, since our points are now persistent, we can have them wander around a little on their own:
+
+```java
+int elements = 40;
+float x[] = new float[elements];
+float y[] = new float[elements];
+
+void setup() {
+  for (int i = 0; i < elements; i++) {
+  	// initialize this point:
+    x[i] = random(width);
+    y[i] = random(height);
+  }
+}
+
+void draw() {
+  background(200);
+  for (int i = 0; i < elements; i++) {
+  	// move this point:
+  	x[i] += random(-1, 1);
+  	y[i] += random(-1, 1);
+  	
+  	// draw it:
+    ellipse(x[i], y[i], 5, 5);
+  }
+}
+```
+
+### Drawing
+
+To get back to our drawing program, we know now that whenever the mouse is being dragged, we need to add a new point to our array. That means the number of points added to the array changes over time, which means we need another variable to store it:
+
+```java
+// the number of drawn points added to the array
+// (initially zero, until drawing begins):
+int numpoints = 0;
+```
+
+Whenever the mouse is dragged, we need to add a point, and increase numpoints accordingly:
+
+```java
+void mouseDragged() {
+	// add a point to the array:
+	x[numpoints] = mouseX;
+	y[numpoints] = mouseY;
+	// increase the number of points added:
+	numpoints += 1;
+}
+```
+
+Our drawing routine needs to respect this number of points added:
+
+```java
+void draw() {
+	background(200);
+	for (int i = 0; i < numpoints; i++) {
+		ellipse(x[i], y[i], 5, 5);
+	}
+}
+```
+
+So the first drawing program looks like this:
+
+```java
+int elements = 1000;
+float x[] = new float[elements];
+float y[] = new float[elements];
+
+// the number of drawn points added to the array
+// (initially zero, until drawing begins):
+int numpoints = 0;
+
+void mouseDragged() {
+  // add a point to the array:
+  x[numpoints] = mouseX;
+  y[numpoints] = mouseY;
+  // increase the number of points added:
+  numpoints += 1;
+}
+
+void draw() {
+  background(200);
+  for (int i = 0; i < numpoints; i++) {
+    ellipse(x[i], y[i], 5, 5);
+  }
+}
+```
+
+If we want to clear the drawing for each gesture, we can reset the ```numpoints``` to zero:
+
+```java
+void mousePressed() {
+	numpoints = 0;
+}
+```
+
+For fun, we could try adding our random wander:
+
+```java
+	// move this point:
+  	x[i] += random(-1, 1);
+  	y[i] += random(-1, 1);
+```
+
+Or any other method to change the points over time. For example, change the size of the point according to the current frame and the point index:
+
+```java
+// the current frame count:
+int frame = 0;
+
+void draw() {
+  background(200);
+  for (int i = 0; i < numpoints; i++) {
+    // calculate the size of the point:
+    int size = (frame + i) % 10;
+    ellipse(x[i], y[i], size, size);
+  }
+  // increase the current frame:
+  frame += 1;
+}
+```
+
+What if we want to join up the points into lines? We know that each point just needs to connect to the point before it, so we could use:
+
+```java
+	// draw line from previous point to current point:
+	line(x[i-1], y[i-1], x[i], y[i]);
+```
+
+But this will throw an error: On the first loop ```i``` is equal to zero, so in attempting to use ```x[i-1]``` we mean ```x[-1]```, an element index which does not exist. The easiest way to fix this is to change the loop start point from ```i = 0``` to ```i = 1```:
+
+```java
+void draw() {
+  background(200);
+  for (int i = 1; i < numpoints; i++) {
+    // draw line from previous point to current point:
+    line(x[i-1], y[i-1], x[i], y[i]);
+  }
+  // increase the current frame:
+  frame += 1;
+}
+```
+
+We could even move these points in a circle according to different frequencies along the line; and have colors pulse down the path:
+
+```java
+void draw() {
+  background(200);
+  for (int i = 1; i < numpoints; i++) {
+    float phase = frame / i;
+    // move this point:
+    x[i] += sin(phase);
+    y[i] += cos(phase);
+    // use this to set the color:
+    stroke((frame + i) % 256);
+    // draw line from previous point to current point:
+    line(x[i-1], y[i-1], x[i], y[i]);
+  }
+  // increase the current frame:
+  frame += 1;
+}
+```
+
+### YellowTail
+
+The interesting things about YellowTail that we haven't implemented yet:
+
+- The line draws itself onto its own tail
+- It does this one step at a time, gradually moving through the list of points
+
+To draw onto the tail, we need to change what data is being stored. Instead of storing the location of the mouse, we can instead store the difference in location from the previous point. Let's try changing our code to do that first. 
+
+Luckily, Processing has another couple of system variables that make our life easier: ```pmouseX``` and ```pmouseY``` store the previous positions of the mouse, so we can use these to calculate the mouse change.
+
+----
+
+Final result:
+
+```java
+// arrays to store the X and Y line segments:
+int elements = 1000;
+float x[] = new float[elements];
+float y[] = new float[elements];
+// the number of drawn points added to the array so far:
+int numpoints = 0;
+// whether or not to animate the line:
+boolean animate = false;
+// the position of the head:
+float headx = 0;
+float heady = 0;
+// the index of the head within the array:
+int head = 0;
+
+// the position of the pen used in drawing:
+float penx = 0;
+float peny = 0;
+
+void setup() {
+  size(600, 600);
+}
+
+void mousePressed() {
+  // reset the line:
+  numpoints = 0;
+  head = 0;
+  // this is where to start from:
+  headx = mouseX;
+  heady = mouseY;
+  // don't move the line while drawing:
+  animate = false;
+}
+
+void mouseReleased() {
+  animate = true;
+}
+
+void mouseDragged() {
+  // record into the array the current mouse *change*:
+  x[numpoints] = mouseX - pmouseX;
+  y[numpoints] = mouseY - pmouseY;
+  // increase the number of points added:
+  numpoints += 1;
+}
+
+void draw() {
+  background(200);
+  fill(0);
+
+  // animate the head: 
+  if (animate && numpoints > 1) {
+    // update the new start position according to the head
+    headx += x[head];
+    heady += y[head];
+
+    // make sure it wraps at the canvas boundaries
+    if (headx > width) {
+      headx -= width;
+    } 
+    else if (headx < 0) { 
+      headx += width;
+    } 
+    else if (heady > height) { 
+      heady -= height;
+    } 
+    else if (heady < 0) { 
+      heady += height;
+    }
+
+    // update the head:
+    head = head + 1;
+    if (head >= numpoints) { 
+      head = 0;
+    }
+  }
+
+  // load the current head position into the "pen"
+  penx = headx;
+  peny = heady;
+
+  // start drawing from the head to the end of the array
+  drawsegments(head, numpoints);
+
+  // now draw the rest of the array from the start to the head
+  drawsegments(0, head);
+
+  // draw the head:
+  ellipse(penx, peny, 5, 5);
+}
+
+void drawsegments(int from, int to) {
+  for (int i = from; i < to; i++) {
+    // draw line from previous point to current point:
+    line(penx, peny, penx + x[i], peny + y[i]);
+    penx += x[i];
+    peny += y[i];
+  }
+}
+```
+
+
 ----
 
 # Submitting your work
