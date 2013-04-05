@@ -965,7 +965,9 @@ void draw() {
 
 ## Data by drawing
 
-This week we'll see if we can figure out how to create something like the *YellowTail* project. We already know how to make a drawing program, but we have a big problem: in YellowTail the drawings can move, which means that they are being redrawn every frame; in our sketch programs we can't do that, because as soon as we call ```background()``` all our previous drawing is lost! 
+This week we'll take our drawing program further. Remember how the drawings in the *YellowTail* project got up and started moving around by themselves? 
+
+We already know how to make a drawing program, but we have a big problem: if drawings will move, this means that they are being redrawn every frame; in our sketch programs we can't do that, because as soon as we call ```background()``` all our previous drawing is lost! 
 
 What we'll need to do is introduce another level of abstraction: we'll store our drawing actions into another kind of memory (we'll use *arrays*), and use that storage to redraw them on every frame. But before we learn about arrays, we need to understand loops.
 
@@ -1005,6 +1007,10 @@ for (int i = 0; i < 6; i++) {
 This prints out the numbers 0, 1, 2, 3, 4, 5 and then stops. The first time through the loop body, ```i``` is at the initial value of 0. After running the loop body ```i``` is increased by one (because of the ```i++```) and then the condition is checked; since ```i``` is still less than 6 (```i < 6```), the loop body runs again. After a few more runs, ```i``` ends up reaching a value of 6, this condition fails, and the ```for``` loop is done.
 
 Now the great thing is that if we wanted to call the function 100 times, we just need to change the code in one place!
+
+---
+
+Here's an example of using a *for loop* to draw some lines:
 
 ```java
 void setup() {
@@ -1136,7 +1142,9 @@ To read a value from the array, we need to specify what index we are interested 
 println(x[10]);
 ```
 
-It's a bit like the pages of a book. Instead of referring to each page by a different name, you can just use the page number; so to get page ten you write ```pages[10]```.  **Note that, like many things in computer science, arrays index from 0, not from 1. So the first item in x is x[0], the second item is x[1], etc.  If the array length is 100, then the last item is at x[99].**
+It's a bit like the pages of a book. Instead of referring to each page by a different name, you can just use the page number; so to get page ten you write ```pages[10]```.  
+
+**Note that, like many things in computer science, arrays index from 0, not from 1. So the first item in x is x[0], the second item is x[1], etc.  If the array length is 100, then the last item is at x[99].**
 
 To store a value into the array, we need to also say which element (at which *index*) to store:
 
@@ -1250,6 +1258,58 @@ void draw() {
 }
 ```
 
+It wouldn't be difficult to combine this with ```translate()``` and more complex drawing functions...
+
+```java
+
+int elements = 40;
+float x[] = new float[elements];
+float y[] = new float[elements];
+
+void setup() {
+  size(400, 400);
+  for (int i = 0; i < elements; i++) {
+    // initialize this point:
+    x[i] = random(width);
+    y[i] = random(height);
+  }
+}
+
+void drawFace() {
+  // paint in white:
+  fill(255);
+  // head:
+  ellipse(0, 0, 300, 300);        
+
+  // paint in black:
+  fill(0);
+  // mouth
+  rect(-100, 50, 200, mouseY / 8);
+  // nose
+  line(0, 0, 0, 20);
+  // eyes
+  ellipse(-70, -50, 80, 80);
+  ellipse( 70, -50, 80, 80);
+}
+
+void draw() {
+  background(200);
+  for (int i = 0; i < elements; i++) {
+    // move this point:
+    x[i] += random(-1, 1);
+    y[i] += random(-1, 1);
+
+    // draw it:
+    //ellipse(x[i], y[i], 5, 5);
+    pushMatrix();
+    translate(x[i], y[i]);
+    scale(0.1);
+    drawFace();
+    popMatrix();
+  }
+}
+```
+
 ### Drawing
 
 To get back to our drawing program, we know now that whenever the mouse is being dragged, we need to add a new point to our array. That means the number of points added to the array changes over time, which means we need another variable to store it:
@@ -1344,7 +1404,11 @@ void draw() {
 }
 ```
 
-What if we want to join up the points into lines? We know that each point just needs to connect to the point before it, so we could use:
+----
+
+What if we want to join up the points into lines? 
+
+We know that each point just needs to connect to the point before it, so we could use:
 
 ```java
 	// draw line from previous point to current point:
@@ -1385,9 +1449,66 @@ void draw() {
 }
 ```
 
+Depending on how drastic the animation, we might not want the line to move until we finish drawing (this is how YellowTail worked too). 
+
+We can turn this into the statement: "Don't modify the line while the mouse button is pressed". 
+Which is equivalent to "Only modify the line if the mouse button is not pressed".
+
+We know the mouse button is pressed if ```mousePressed``` is true. Since we want the opposite case, we need to prefix this with the *logical not* operator, which is Processing is written ```!```:
+
+```java
+	if (!mousePrsesed) {
+		// update the line here	
+	}
+```
+
+Of course, there's no reason why we shouldn't use a more complex shape than just a line... Can you figure out how to use ```translate()```, ```rotate()``` and ```scale()``` with ```x[i-1]```, ```y[i-1]```, ```x[i]``` and ```y[i]``` to draw with complex combinations of drawing commands?
+
+----
+
+# Assignment: ANTustrator II
+
+Extend your drawing program (or create a new one) in which each gesture comes alive and moves around, changes shape, etc. 
+
+- You could draw with blobs, or faces, or lines, or more complex shapes... 
+- Your objects might move around with random motions, or geometric or rhythmical patterns
+
+----
+
+# Submitting your work
+
+You can submit your projects to our [classroom page on OpenProcessing](http://www.openprocessing.org/classroom/2619). You'll first need to register with a username; please use your school ID and name for your username, e.g.:
+
+```
+123456_grahamw
+```
+
+To submit a sketch to your OpenProcessing portfolio:
+
+- Go to [OpenProcessing.org](http://www.openprocessing.org/) and sign in.
+- Go to the *my portfolio* page and click on *create new sketch*
+- Copy your Processing code from the Processing editor and paste it into the webpage, and click *save*
+- Add a title for your work, and a description if you like.
+- Again click *save*
+
+To submit one of your portfolio works to the classroom assignment sub-collection:
+
+- Go to [the classroom collection](http://www.openprocessing.org/classroom/2619)
+- Click on the *Select a sketch* button
+- Click on the sketch you want to submit
+- Now move this sketch into the proper assignment sub-collection.
+
+Make sure your code is commented with your original idea. Avoid repeating the same code as much as possible.
+
+Assignments are due every Wednesday at 3pm. 
+
+----
+
 ### YellowTail
 
-The interesting things about YellowTail that we haven't implemented yet:
+To actually implement YellowTail is more complex. Below is some code that implements it, but don't worry if this is too difficult to understand. We can just look at it quickly if there is time.
+
+Here are some of the things we haven't implemented yet:
 
 - The line draws itself onto its own tail
 - It does this one step at a time, gradually moving through the list of points
@@ -1396,9 +1517,7 @@ To draw onto the tail, we need to change what data is being stored. Instead of s
 
 Luckily, Processing has another couple of system variables that make our life easier: ```pmouseX``` and ```pmouseY``` store the previous positions of the mouse, so we can use these to calculate the mouse change.
 
-----
-
-Final result:
+Here's an example of how that might look:
 
 ```java
 // arrays to store the X and Y line segments:
@@ -1501,35 +1620,6 @@ void drawsegments(int from, int to) {
 }
 ```
 
-
-----
-
-# Submitting your work
-
-You can submit your projects to our [classroom page on OpenProcessing](http://www.openprocessing.org/classroom/2619). You'll first need to register with a username; please use your school ID and name for your username, e.g.:
-
-```
-123456_grahamw
-```
-
-To submit a sketch to your OpenProcessing portfolio:
-
-- Go to [OpenProcessing.org](http://www.openprocessing.org/) and sign in.
-- Go to the *my portfolio* page and click on *create new sketch*
-- Copy your Processing code from the Processing editor and paste it into the webpage, and click *save*
-- Add a title for your work, and a description if you like.
-- Again click *save*
-
-To submit one of your portfolio works to the classroom assignment sub-collection:
-
-- Go to [the classroom collection](http://www.openprocessing.org/classroom/2619)
-- Click on the *Select a sketch* button
-- Click on the sketch you want to submit
-- Now move this sketch into the proper assignment sub-collection.
-
-Make sure your code is commented with your original idea. Avoid repeating the same code as much as possible.
-
-Assignments are due every Wednesday at 3pm. 
 
 </div>
 <!--
