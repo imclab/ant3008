@@ -1475,35 +1475,6 @@ Extend your drawing program (or create a new one) in which each gesture comes al
 
 ----
 
-# Submitting your work
-
-You can submit your projects to our [classroom page on OpenProcessing](http://www.openprocessing.org/classroom/2619). You'll first need to register with a username; please use your school ID and name for your username, e.g.:
-
-```
-123456_grahamw
-```
-
-To submit a sketch to your OpenProcessing portfolio:
-
-- Go to [OpenProcessing.org](http://www.openprocessing.org/) and sign in.
-- Go to the *my portfolio* page and click on *create new sketch*
-- Copy your Processing code from the Processing editor and paste it into the webpage, and click *save*
-- Add a title for your work, and a description if you like.
-- Again click *save*
-
-To submit one of your portfolio works to the classroom assignment sub-collection:
-
-- Go to [the classroom collection](http://www.openprocessing.org/classroom/2619)
-- Click on the *Select a sketch* button
-- Click on the sketch you want to submit
-- Now move this sketch into the proper assignment sub-collection.
-
-Make sure your code is commented with your original idea. Avoid repeating the same code as much as possible.
-
-Assignments are due every Wednesday at 3pm. 
-
-----
-
 ### YellowTail
 
 To actually implement YellowTail is more complex. Below is some code that implements it, but don't worry if this is too difficult to understand. We can just look at it quickly if there is time.
@@ -1619,6 +1590,310 @@ void drawsegments(int from, int to) {
   }
 }
 ```
+
+----
+
+# OOPs
+
+We've met a few useful ways to **abstract** parts of our program, which makes it easier for us to rapidly extend or change the program. We saw *variables* for persistent state, and got used to using *functions* to re-use commands. We got used to arrays:
+
+```java
+float x[] = new float[elements];
+```
+
+And doing things with ```x[i]``` and ```y[i]``` to repeat processes with different state. Is there a way to combine some of these capabilities?
+
+## Objects
+
+Instead of having a list of x's and list of y's (and lists of r's, g's, b's, size's, rotation's, etc. etc.) we can have a list of objects, where each object has an x, y (r, g, b, etc.). 
+
+We can go further; not only can we group properties into an object (we'll call them **members**), we can also have functions (we'll call them **methods**). All objects of the same type (we'll call it a **class**) have the same kinds of member, and the same methods.
+
+For example, in our drawing program we could define a class of object and use it to represent an individual face, or a platter of paint. It might look something like this:
+
+```java
+
+// define a new type of object (class) with the name "Face":
+class Face {
+	
+	// properties of the object go here
+	float x;
+	float y;
+	// r, g, b, etc.
+	
+	// any actions when the face is created go here
+	// (i.e. what was in setup() before)
+	Face() {
+		// setup code here
+	}
+	
+	// any actions when the face was drawn go here
+	// (i.e. what was in draw() before)
+	void draw() {
+		pushMatrix();
+		// notice how we can use the member variables x and y directly here:
+		translate(x, y);
+		// drawing code here
+		popMatrix();
+	}	
+}
+```
+
+Creating an object uses the ```new``` operator (which we met before with arrays), but in a slightly different way:
+
+```java
+// declare a variable of type Face
+Face myface;
+
+void setup() {
+	// allocate and initialize the variable:
+	myface = new Face();
+}
+
+void draw() {
+	// call the draw method for myface:
+	myface.draw();
+}
+```
+
+Of course our objects can contain properties of any type, including floats, ints, colors etc., but also arrays, and other classes of object. And they can contain other methods which we can use to change properties, like animating the face. 
+
+And, of course, we can create more than one object from a class (that's half of the whole point...)
+
+Here's a full example:
+
+```java
+class Face {
+  // properties of the object go here
+  float x;
+  float y;
+  float eyesize;
+  // any actions when the face is created go here
+  // (i.e. what was in setup() before)
+  Face() {
+    // setup code here
+    x = random(width);
+    y = random(height);
+    eyesize = 2 + random(8);
+  }
+  // any actions when the face was drawn go here
+  // (i.e. what was in draw() before)
+  void draw() {
+    pushMatrix();
+    // notice how we can use the member variables x and y directly here:
+    translate(x, y);
+    // drawing code here
+    // paint in white:
+    fill(255);
+    // head:
+    ellipse(0, 0, 30, 30);        
+    // paint in black:
+    fill(0);
+    // mouth
+    rect(-10, 5, 20, 2);
+    // nose
+    line(0, 0, 0, 2);
+    // eyes
+    ellipse(-7, -5, eyesize, eyesize);
+    ellipse( 7, -5, eyesize, eyesize);
+    // drawing done:
+    popMatrix();
+  }
+
+  // a method to update the state of the object
+  void update() {
+    x += random(-1, 1);
+    y += random(-1, 1);
+  }
+}
+
+// declare variables of type Face
+Face myface1;
+Face myface2;
+
+void setup() {
+  // allocate and initialize the variable:
+  myface1 = new Face();
+  myface2 = new Face();
+}
+
+void draw() {
+  // update the objects:
+  myface1.update();
+  myface2.update();
+
+  // clear the scene:
+  background(200);
+
+  // draw the objects:
+  myface1.draw();
+  myface2.draw();
+}
+```
+
+Of course, we can also make arrays of objects. As usual, all elements in an array must have the same type, which means an array of objects must all have the same class:
+
+```java
+// an array of Faces:
+Face[] myfaces;
+
+// how many blobs we will make:
+int numfaces = 100;
+
+void setup() {
+	size(400, 400);
+	
+	// allocate the array:
+	myfaces = new Face[numfaces];
+	
+	// now allocate & initialize each member of the array:
+	for (int i=0; i < numfaces; i++) {
+		myfaces[i] = new Face();
+	}
+}	
+
+void draw() {
+	// draw each member of the array:
+	for (int i=0; i < numfaces; i++) {
+		myfaces[i].draw();
+	}
+}
+```
+
+Knowing that, we could make a class to hold arrays of paint splaters, and call it a Stroke. We could then also create an array of Strokes, to support multiple drawing gestures at the same time, so that we can have a more complex drawing program...
+
+----
+
+# Pong
+
+Our last excursion with Processing will be to create a game. We're going to rebuild one of the oldest and most famous computer games of all time: **PONG!**
+
+![Pong the arcade game](http://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Atari_Pong_arcade_game_cabinet.jpg/250px-Atari_Pong_arcade_game_cabinet.jpg)
+
+> Pong is one of the earliest arcade video games; it is a an electronic ping-pong game featuring simple two-dimensional graphics. Pong was one of the first video games to reach mainstream popularity. The game was originally manufactured by Atari Incorporated (Atari), who released it in 1972. Pong quickly became a success and is the first commercially successful video game, which led to the start of the video game industry. Pong has been referenced and parodied in multiple television shows and video games, and has been a part of several video game and cultural exhibitions. [wikipedia](http://en.wikipedia.org/wiki/Pong)
+
+## The Game
+
+> The player controls an in-game paddle by moving it vertically across the left side of the screen, and can compete against either a computer controlled opponent or another player controlling a second paddle on the opposing side. Players use the paddles to hit a ball back and forth. The aim is for a player to earn more points than the opponent; points are earned when one fails to return the ball to the other. [wikipedia](http://en.wikipedia.org/wiki/Pong)
+
+[Here is a video example.](http://www.youtube.com/watch?v=pDrRnJOCKZc)
+
+![Screenshot](http://upload.wikimedia.org/wikipedia/commons/f/f8/Pong.png)
+
+To rebuild Pong in Processing we should analyze the important components and subcomponents, to make sure we can implement each one, until the entire game is complete.
+
+*(More advanced features are left in italics, to note that we can add them later...)*
+
+## Rendering
+
+- **Background**: just plain black.
+- **Net**: here we can just use a ```line```.
+	- *If we want to create a dashed line as in the original Pong, we would need to create a series of small lines. We could use a ```for``` loop to do this.*
+- **Paddles**: just a regular ```rect```.    
+	- We might want to use ```rectMode(CENTER)``` to position the paddles.   
+	- The horizontal position of paddles never changes, but the vertical position does, so we should use a variable. 
+	- We might also want to store the paddle width and height in variables. 
+- **Ball**: same rendering style as paddles.   
+	- The ball has both X and Y movement, which will need variables.
+- **Scores**: we can draw text in Processing using the ```text``` function.    
+	- Obviously the scores can also change, so we'll need variables for each player's score. They can be integers.  
+	- If we want anything other than the default font, we'll need to use ```createFont``` and ```textFont``` functions. *Alternatively we could try and reconstruct boxy characters like the original Pong game.* 
+
+## Interaction
+
+- **Paddles**: players can move the paddles up and down the screen.    
+	- For a two-player game, we'll need to use keypresses to move the paddles.
+		- We can use the ```keyPressed()``` event to detect when a key is pressed, and modify a paddle velocity according to what key it is.
+		- *We could use ```keyReleased()``` to set the paddle velocity back to zero.*
+	- *We'd also need to invent one or more algorithms for the computer's playing style... Perhaps we can use a random walker that is more likely to move toward the ball Y position than away from it?*
+	- Paddles should also be restricted from reaching the top or bottom of the screen.
+		- *In the real Pong game, they couldn't even quite reach the edge, so there was always a chance to score against a pro.*
+- **Options**: we might want to use other keypresses to choose options:
+	- A key to reset the game & scores to zero
+	- *A key to pause the game*
+	- *Whether to play 2-player mode or 1-player versus computer*
+
+## Dynamics
+
+Most of the game dynamics come from the movement of the ball. These are the basic properties of Pong:
+
+- The ball is always moving. It can move horizontally or vertically. 
+	- That means we will also need variables to store the ball horizontal and vertical speed, and a process to use them to continually update the position.
+	
+```java
+	// calculate a new position for the ball:
+	float new_x = position_x + speed_x;
+	float new_y = position_y + speed_y;
+	
+	// update the position:
+	position_x = new_x;
+	position_y = new_y;
+```
+	
+- At the start of a round, the ball begins in the center of the screen with a random direction of motion.
+- If the ball touches the top or bottom edge of the screen:
+	- It bounces (reversing the vertical direction)
+- If the ball reaches the left edge of the screen:
+	- Player 2 gains one point
+	- A new round is started
+- If the ball reaches the right edge of the screen:
+	- Player 1 gains one point
+	- A new round is started
+- If the ball collides with the inside face of a paddle:
+	- It reverses horizontal direction
+	- *It speeds up slightly, to make the game get harder.*
+	- *It changes vertical direction slightly, depending on which edge (top or bottom) of the paddle it collided with.*
+
+The trickiest part of that is detecting whether the paddle has hit the ball. We can break that down into two conditions:
+
+- The Y position is between the top and bottom edges of the paddle.
+- The old X position was in front of the inside face of the paddle, and the new X position is on or behind the inside face of the paddle.
+
+*Strictly speaking this is not quite accurate. For a real collision detection we would need to use a sphere-rectangle intersection function. But the approximation works well enough.*
+
+Once we havea pong working, we can start playing around with new rules, different interactions, graphics, etc... and of course cool sounds...
+
+[Taking pong way too far...](http://www.youtube.com/watch?v=NDjseVmruH8)
+
+----
+
+# Assignment 5: SoClock
+
+
+Create a novel design for a clock. The clock should show the hours, minutes and seconds in an interesting new way. You can use elements from one of the previous assignments (visual or code). 
+
+Your clock must at least show the hour and minute and seconds, but you can also use milliseconds, day, month, year if you like. Remember the built-in Processing functions for telling the time include ```hour(), minute(), second(), millis(), day(), month(), year()```.
+
+Be sure to include a debug mode for the clock: while the mouse is pressed down, use the mouseX and mouseY to override the hour and minutes, so that you can verify how it looks without having to wait all day!
+
+----
+
+# Submitting your work
+
+You can submit your projects to our [classroom page on OpenProcessing](http://www.openprocessing.org/classroom/2619). You'll first need to register with a username; please use your school ID and name for your username, e.g.:
+
+```
+123456_grahamw
+```
+
+To submit a sketch to your OpenProcessing portfolio:
+
+- Go to [OpenProcessing.org](http://www.openprocessing.org/) and sign in.
+- Go to the *my portfolio* page and click on *create new sketch*
+- Copy your Processing code from the Processing editor and paste it into the webpage, and click *save*
+- Add a title for your work, and a description if you like.
+- Again click *save*
+
+To submit one of your portfolio works to the classroom assignment sub-collection:
+
+- Go to [the classroom collection](http://www.openprocessing.org/classroom/2619)
+- Click on the *Select a sketch* button
+- Click on the sketch you want to submit
+- Now move this sketch into the proper assignment sub-collection.
+
+Make sure your code is commented with your original idea. Avoid repeating the same code as much as possible.
+
+Assignments are due every Wednesday at 3pm. 
 
 
 </div>
