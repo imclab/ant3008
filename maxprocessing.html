@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Digital Media Art Workshop</title>
+    
+<link href="css/site.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/highlight.default.css" media="screen" rel="stylesheet" type="text/css" />
+  
+<script src="js/jquery.js"></script>
+<script src="js/showdown.js" type="text/javascript"></script>
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<!--
+Write the markdown code below.
+A guide to markdown syntax is at http://daringfireball.net/projects/markdown/
+-->
+
+<div style="display: none" id="sourcetext">
+
+# Connecting Processing and Max/MSP/Jitter
+
+We'll connect Processing and Max by using network messages, which are structured using the OSC protocol. The basic form of the OSC protocol sends messages as a pathname (a string with ```/``` slashes, e.g. ```/foo/bar```) followed by a list of arguments (which can be ints, floats and strings).
+
+First however we need to install an extension library for Processing to add OSC support. [Download the oscP5 library from here](http://www.sojamo.de/libraries/oscP5/). Unzip this file and copy the ```oscP5``` directory it contains into the ```libraries``` subdirectory of the ```Processing``` directory. (On OSX this is in ```Documents/Processing/libraries```, on Windows it is ...?)
+
+Max has enough objects built-in for us to get started with OSC without needing to download anything. 
+
+## Sending from Processing
+
+```java
+// load the P5 libraries:
+import oscP5.*;
+import netP5.*;
+
+// create the objects we need:
+OscP5 oscP5;
+NetAddress myRemoteLocation;
+
+void setup() {
+  // start oscP5:
+  oscP5 = new OscP5(this, 11111);
+  // set up the address we will send messages to:
+  // "127.0.0.1" means 'send to the same machine this is running on'
+  // 12345 is the port number Max is listening on
+  myRemoteLocation = new NetAddress("127.0.0.1", 12345);
+}
+
+// send a message when the mouse is pressed:
+void mouseDragged() {
+  // start building a message (with the message address /test):
+  OscMessage myMessage = new OscMessage("/test");
+
+  // add some arguments:
+  myMessage.add(mouseX); /* add an int to the osc message */
+  myMessage.add(1.23); /* add a float to the osc message */
+  myMessage.add("hello"); /* add a string to the osc message */
+
+  // and finally, send it:
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+void draw() {
+  // whatever you draw goes here
+}
+
+```
+
+> Possible problems: you can only have one instance of this running in Processing. If this happens, and error about "address already in use" will appear in the console. Just close the other sketches and run again. Sometimes oscP5 seems to get confused and complains even when other sketches are not running. If that happens, change the number in the OscP5 constructor to another five-digit value.
+
+## Receiving in Max
+
+Just create a [udpreceive 12345] object. Whatever you send in Processing will come out of the Max object's outlet. You probably want to use [route] to divert messages according to the address, and then [unpack] to get the individual arguments, like the patcher below. Just add more conditions to the [route] to match whatever messages you will be handling:
+
+```
+<pre><code>
+----------begin_max5_patcher----------
+531.3ocwUtsbaCBDF9ZomBFtVoEPGhSuqOGc5jAIgsIQFz.HG2lIu6kC1tJt
+NVpZTUuQLrrZ4e+fc403HXo7.SCAeA7MPTzqwQQdSNCQGmGA2QOT0P0d2f6X
+ZMcCClDVyvNX712xZZjmr1RMUa4hMOpXUlPzIqx9DJwN7fa.msxOX+B99weZ
+sTXz7exb9iI1kClEc63hFlwu8jiF409MUV9zc3UvdAPP24C.7qJNs4zJxNiM
+BlezxBhABOuq1vGV0Gery3awwtOIijHqaj1fbqTmf6k54H+DzeYliuRlmOgL
+2pVpAl.fkTwleigVpx9+Fl5QlfV138FcUDQl.hrQnjotAhvEn+MHJcBHhKVd
+.wdwJ2+nnpSzRqdFvAqA5QPu.2vY3YCe3oiuyWz9nZsz4iSJaXYfOaXZyvXB
+meuanHaRT5JcfHSoAzM.ybdApt0l+L9dlMgRyxGAcPgNynhY6Rz+49ye.ZZU
+1KpfNwyB4Kh6t3Ysq0EGk6AyCD+P5pYiOECCn2SATOJ32cXCWb4y39TvY+8n
+QK6TUmv7oZb.4bRTaqg3BpgKE8cx9HK.e1os75ZlneKvZt10Ur9R4kLM8fGR
+O1ax.zxoGzP5IcwzCYLxAunxYvSqhk6zZDzgLQ0DJ0nss6YJ8wP5EhseySRk
+aZQheJWDl5q1gJ1d9I+CVnJa2Eis0RmJTrenHCF61m2h+E.4r2po
+-----------end_max5_patcher-----------
+</code></pre>
+
+```
+
+> Possible problems: you can only have one of these objects running in Max at one time; watch out for having more than one of your patchers open. If this happens, and error about "address already in use" will appear in the Max window. Just close all the max patchers and re-open the one you want.
+
+</div>
+<div id="wrapper">
+	
+	<div class="header">
+		
+		<h1>ANT3010</h1>		
+		<a href="index.html">Overview</a><br/>
+		<a href="dmaworkshop.pdf">Syllabus</a><br/>
+		<br/>
+		<a href="processing.html">Processing</a><br/>
+		<br/>
+		<a href="max.html">Max/MSP/Jitter</a><br/>
+		<br/>
+		<a href="maxprocessing.html">Processing to Max</a><br/>
+	</div>
+	<div class="section">
+		<script type="text/javascript">
+		//var converter = new Markdown.Converter();
+		var converter = new Showdown.converter();
+		document.write(converter.makeHtml($('#sourcetext').text()));
+		</script>
+	</div>
+	
+	<div class="footer">Haru Ji & Graham Wakefield, 2013</div>
+	
+</div>
+</body>
+</html>

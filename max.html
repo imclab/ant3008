@@ -42,6 +42,55 @@ Max/MSP is commercial software and supports Mac OSX and Windows. You can [downlo
 
 The materials included within the Max/MSP/Jitter application (help & reference, examples and other documentation) and the [Max website](http://cycling74.com/category/articles/tutorials/) are probably the best resources available. 
 
+[All the Max documentation is also available online here.](http://cycling74.com/docs/max6/dynamic/c74_docs.html#docintro)
+
+----
+
+# Start Patching
+
+You've been writing text for years, but how often have you patched? That means we need to build-up motor-muscle-memory; we need to spend as much time patching as possible. 
+
+Patching has two modes (switch using the padlock icon or *Command-E*):
+
+- **Edit** mode, for creating objects, moving objects around, changing their size, connecting them up, etc.
+- **Interaction** mode, in which editing isn't possible, but install buttons and number boxes and sliders etc. can be manipulated in real-time. 
+- (Actually there's a third *presentation* mode, which hides the objects away, for making performance interfaces, but we can ignore that for now).
+
+## Objects and patch-cords
+
+There are two kinds of object:
+
+- *UI object*: buttons, sliders, video windows, oscilloscopes, etc., i.e. anything that has interaction input or visual output.
+- *Generic box object:* everything else.
+
+The generic box object performs a specific function according to the first word written in it. So [metro] functions like a metronome, [print] functions to print text in the console, [trigger] will fire several messages, [delay] will delay a message for some time.
+
+Objects have **inlets** and **outlets**, which can be connected by **patch-cords**. Inlets & outlets can have many patchcoords connected to them, or none at all. 
+
+Creating objects and connecting them up is pretty much all there is to writing programs in Max.
+
+## Messages
+
+Different kinds of data (*messages*) can flow down the patchcoords, like numbers and strings and video frames etc. The simplest kind of message data is called **bang**, and it just means "do something now". 
+
+When an object receives messages in the inlets, it does something, and possibly outputs new messages to the outlets. So, for example, when a [button] receives a ```bang``` message, it flashes, and outputs another ```bang``` message to the outlets.
+
+The easiest way to see what is going down a patch coord is to hook a [print] object up to it, and see what shows up in the Max console window.
+	
+> You can also use [print foo], [print myname] etc. to distinguish between different print outputs. Or to be more fancy, use [print @popup 1] to see it in a message in the Max patch. Or, another way is to hook up to the *right* inlet of a [messagebox]... In Max there are always many ways to do things... 
+
+## Hot and cold inlets
+
+Not every inlet causes action right away. Some inlets are "cold"; they just store the message received, which will get used when something arrives at the other "hot" inlet. 
+
+Find out which are hot or cold by putting the mouse over the inlet -- it will either show up blue (cold) or red (hot). 
+
+## Order of operation
+
+If an object has several outlets, they output in a right-to-left order (mostly). To think like Max, you have to follow all of the connections from an object until they end, or reach a cold inlet, then move to the next outlet to trace. 
+
+If an outlet is connected to two or more other objects, the order in which the messages fire are determined by right-to-left order of the destination objects. Normally this is what you want, but if it isn't, then the [trigger] object is usually what you need to control things more explicitly. 
+
 </div>
 <div id="wrapper">
 	
@@ -54,6 +103,8 @@ The materials included within the Max/MSP/Jitter application (help & reference, 
 		<a href="processing.html">Processing</a><br/>
 		<br/>
 		<a href="max.html">Max/MSP/Jitter</a><br/>
+		<br/>
+		<a href="maxprocessing.html">Processing to Max</a><br/>
 	</div>
 	<div class="section">
 		<script type="text/javascript">
