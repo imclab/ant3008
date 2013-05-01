@@ -60,8 +60,8 @@ Patching has two modes (switch using the padlock icon or *Command-E*):
 
 There are two kinds of object:
 
-- *UI object*: buttons, sliders, video windows, oscilloscopes, etc., i.e. anything that has interaction input or visual output.
-- *Generic box object:* everything else.
+- **UI object**: buttons, sliders, video windows, oscilloscopes, etc., i.e. anything that has interaction input or visual output.
+- **Generic box object:** everything else.
 
 The generic box object performs a specific function according to the first word written in it. So [metro] functions like a metronome, [print] functions to print text in the console, [trigger] will fire several messages, [delay] will delay a message for some time.
 
@@ -71,7 +71,7 @@ Creating objects and connecting them up is pretty much all there is to writing p
 
 ## Messages
 
-Different kinds of data (*messages*) can flow down the patchcoords, like numbers and strings and video frames etc. The simplest kind of message data is called **bang**, and it just means "do something now". 
+Different kinds of data (*messages*) can flow down the patchcoords, like numbers and strings and video frames etc. The simplest kind of message data is called ```bang```, and it just means "do something now". 
 
 When an object receives messages in the inlets, it does something, and possibly outputs new messages to the outlets. So, for example, when a [button] receives a ```bang``` message, it flashes, and outputs another ```bang``` message to the outlets.
 

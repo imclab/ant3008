@@ -70,6 +70,8 @@ void draw() {
 
 > Possible problems: you can only have one instance of this running in Processing. If this happens, and error about "address already in use" will appear in the console. Just close the other sketches and run again. Sometimes oscP5 seems to get confused and complains even when other sketches are not running. If that happens, change the number in the OscP5 constructor to another five-digit value.
 
+> You might also need to open up these ports on the computer's firewall settings. 
+
 ## Receiving in Max
 
 Just create a [udpreceive 12345] object. Whatever you send in Processing will come out of the Max object's outlet. You probably want to use [route] to divert messages according to the address, and then [unpack] to get the individual arguments, like the patcher below. Just add more conditions to the [route] to match whatever messages you will be handling:
@@ -95,6 +97,8 @@ aZQheJWDl5q1gJ1d9I+CVnJa2Eis0RmJTrenHCF61m2h+E.4r2po
 ```
 
 > Possible problems: you can only have one of these objects running in Max at one time; watch out for having more than one of your patchers open. If this happens, and error about "address already in use" will appear in the Max window. Just close all the max patchers and re-open the one you want.
+
+> You might also need to open up these ports on the computer's firewall settings. 
 
 </div>
 <div id="wrapper">
