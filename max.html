@@ -73,9 +73,9 @@ Different kinds of data (*messages*) can flow down the patchcoords, like numbers
 
 When an object receives messages in the inlets, it does something, and possibly outputs new messages to the outlets. So, for example, when a [button] receives a ```bang``` message, it flashes, and outputs another ```bang``` message to the outlets.
 
-The easiest way to see what is going down a patch coord is to hook a [print] object up to it, and see what shows up in the Max console window.
+The easiest way to see what is going down a patch coord is to hook a [print] object up to it, and see what shows up in the Max console window. Or, another way is to hook up to the *right* inlet of a [messagebox].
 	
-> You can also use [print foo], [print myname] etc. to distinguish between different print outputs. Or to be more fancy, use [print @popup 1] to see it in a message in the Max patch. Or, another way is to hook up to the *right* inlet of a [messagebox]... In Max there are always many ways to do things... 
+> You can also use [print foo], [print myname] etc. to distinguish between different print outputs. 
 
 ## Hot and cold inlets
 
@@ -88,6 +88,15 @@ Find out which are hot or cold by putting the mouse over the inlet -- it will ei
 If an object has several outlets, they output in a right-to-left order (mostly). To think like Max, you have to follow all of the connections from an object until they end, or reach a cold inlet, then move to the next outlet to trace. 
 
 If an outlet is connected to two or more other objects, the order in which the messages fire are determined by right-to-left order of the destination objects. Normally this is what you want, but if it isn't, then the [trigger] object is usually what you need to control things more explicitly. 
+
+## Getting help about a max object
+
+There's lots of ways to get more information about a max object:
+
+- Select the max object in question and open the *Reference* sidebar tab. The reference page also may have links to examples, tutorials and related objects.
+- Right-click and select *Help* (or alt-click) on the object, to see a patcher explaining how it works.
+- Mouse over the inlet or outlet to see a brief explanation of what it is used for.
+- Click on an inlet to see the list of messages the inlet can understand.
 
 </div>
 <div id="wrapper">
