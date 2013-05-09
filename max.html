@@ -144,53 +144,84 @@ There's lots of ways to get more information about a max object:
 - Mouse over the inlet or outlet to see a brief explanation of what it is used for.
 - Click on an inlet to see the list of messages the inlet can understand.
 
-# Assignment 1
+-----
 
-To be announced in class.
+# Assignment 1: Alert!
+
+Create one (or more) alert sounds. They could be for a phone text message, mail received, or a calendar or clock alarm, or warnings or other events for a game. Whatever it is, it should capture attention, and convey nuance through its sonic shape.
+
+Start from the patcher below (copy the text and in Max select File -> New From Clipboard). 
+
+Only use the objects that the patcher already contains, but connect them up in a new way. You don't have to use them all. 
+
+Your sound should be triggered from the large [button] object, and should become silent after one second. The final sounds should go into the first inlet of the [clip~] object at the bottom right.
+
+```
+<pre><code>
+----------begin_max5_patcher----------
+1959.3oc2a0zbihqEccxuBUdy7QmlBARBHa5Z9XSun2L07V7pd5pKLHaqowR
+t.QR6Ypo+s+tRBrwoAhcZhcdSpXhsjLHct26Qmqjxee8Uylq9LuZF5Vz6QWc
+0ee8UWYKxTvUMe9pYqS+bVQZksYyj76Uy+yY23pRy+r1Vb11rB9WPXlueacK
+TRsLcM2V+OUJRKZqQVuVHK3Z6cLXegpZcao3N2jJweYuI3.O+lh2jpyVIjK+
+XIOS659TepWBlEQhuAEDm.MEEQMWC787Qen4KJxscGXH75n1ti6wp2tg6tSy
+pDKkPuE8AS8+y0WatbyQhOYp0q4R8WAPuEogN7mLWqPUpZYNRT444chnEtWz
+pEVVTtbt8y6.pCvO+wvuvjHCZEZwrPL0iwXQX.Lww8iegylP3IOUyuE8tzsH
+L8ECjfIA6gDbfEeFBMHSIZXF02hdyadyKFnHfkzAJB8GCJnSIT71eEnH7gmn
++Iyr7b5Xz0uHdLvfMkfwuwWyWOmWhzJjttT5XSTx1FVHj7LfaQ2kX8xiVzHO
+5MHVn8OItXpvNv0754yK3c6Dc.P7TBf+hRBHjFsUUWhVH.VdjiruBIjFPcEG
+JtrRCebSsFoVfxJDat81dQXxEAgcnUkH2VQ3i4kRCRLvdr0KkROVXmj7Tv8g
+TG.X3WPuFivmXHb3DIN.66vBhkCm4Olt.R7yhvfAfle7KWH8RjjXidIVbDDM
+Rbr6AFOkAwkyqfoepnRYhSQYoRT1pT4RtM7Lqt7NtIb07oJHbsVloEJIB5iv
+fq51WPjgGFpFbjFiHqwHHv5kRhO5H1Icpl+aCxmZLCMvOfFlIeRKWVa9NfQX
+g0BUH9DG88bukdtVBiMz6eEB+AGoJ71vO7CdndMLrW1bnDVWgvX6L89148iN
+dCyjJH52gX.W9CUqT0E4n4PbQoX4RdIOGUWY.eqrf40ZsR50KpG9hQafaRJF
+yIkx54SHGMxNopt+O.ahRVr0Ryzvl.nag5du+P9N0cV9m0f6uE8SgWYMxIrk
+WuwPJkKVr.rDRM59zsUH.uEE6CRteUJHsPixU.E12atEvshC5MLu89Uagnj+
+PZB8xUxuSiVkZdnJvpxg.wBibDyipeaJ8ENEWmHIW54AtYiMQUGo4dRS47co
+fAwxvwK0MgTy21ZScgQ68CDMhssiLd4H4si9YEDU9VcZgHa5Q93GOuDmROB0
+KD9AGB.cz.ynG7TvSsZ4RvDc7iL7vcXFM1Cl1yNuGNZmrrGHBYSZIfvZd4G4
+xzF2C+dFN9CJPQXBQlPUaPuoTgnWp055.XKwYuiGSSa3vZZmCSXOoXSdYs7S
+.EgOhdgT6SYQVe+HhQFkEXhHiBOQmMOmWcoz6y.Ykmjd+vvyYdPu5KfKykBZ
+.ffbHzPvi5uPNuoHhBtTKpdB0iF6hjNNmlfyLx36QuTXiI0rCwF25EOH1feV
+vlpL0F9NVk40KZ69LxXC+rzhrcZGiGURReqGbRnWbCEKM1Qt51tEa5Q8N78m
+vUT5GujF9f86zTHlseofGxvGjLngeQgJcZmfoDRkPs1L+6khMEhEXMhSZm8c
+b34YX1W.WgwwjrgAAmNB.NEwsZuoVlA5SVUa.6Qbdt4aQC2EEmnzn84n7MiS
+z+0hSrnfIzeh7bhSCPJUAy1vQXylnhdM1CgO088lMUjSAj8R8bb2X+vQYmFV
+F7zpk4xo+kB9WObBsQU4EDb9xW5Rs8Hwz8p6NJL47s5Clk8aZRi7IvYGXyUx
+5qPbK8PHar3G7itcZeaDyMa+yIP.SFaeX7siNyhTRZNvGXq3EVvoS0hSdbp1
+1WMHPS6Syy2n.2llilkkr2c4F6oRIlFgIQlxBCHvu1JXfkKfPhiBMUPnIvut
+uguem6v+V7DYPN5sofbbdhz+OxSj4mrez8s6IRdV7Dg7fnQDmiXbfY08skG3
+G4QHrX+XSEQjcU774H1b9CieArNIMG9P5n47fOqKtVC5P7ujKX8CvG1nKXM9
+4YcjJD2w8VlJj6HstKsbGN7001aL7lRdEWpSMA6cm6vZvcWcxyC6tRH8G4Ws
+Rce6yu286I7XNVKtEfAGx9pmZe7CsiCUoncXLzYux+HXLMu1QhTHpz6IOLmF
+.Iu3.zqJ8Nd9GS05Rw7ZMe+6pZraMFNioonlqVzVba4cGT0RgtRu0MtZvzCZ
+vZv7ayenEFePsB6P+0Q98Vu.t8lPC6PFPi1A1AMpETF4F70f+AsBbBJ0C6Ed
+Pag7PW1WScszFNz9mSL1f+W4oY6772TpzJyPa2CaEuXyBw.67WKQwbUYNuLS
+UnJamvf5iSX3a58c3ACP1s+xK6bybm+htW53nOTzAKjzdpBd3YKv1YsVEuHZ
+OR52sfsEpLma.9I.rtChwzrgocOtDI31q8lOxIrie1uuUL2C9eAv1CLke3vq
+RUWl0d6ZOybn8cibdkVH2wr79cK.b2FsRjmykcs0qEGn0.CjePBWT2pGFBoo
+2tod1h1+zDUlnK6P2uW6yjNLvO1vXB6O9GCrFe15OlDZP3GCeNi8Gxwzenmu
+9ywXuLrJu35O3mP+wwZjtYyc7xpl6osq.ze+oix1trcPbsz8QKw1rR9ch11a
+m2XVZIvyoARt5R2bMeN1bXFgmy+b8+C.77pUE
+-----------end_max5_patcher-----------
+</code></pre>
+```
 
 ----
 
 # Submitting your work
 
-Unfortunately there's nothing like OpenProcessing for Max yet (maybe later this year?)  So instead, please submit your Max projects directly to me by email at grrrwaa at gmail dot com. 
+Unfortunately there's nothing like OpenProcessing for Max yet (maybe later this year?)  So instead, please submit your Max projects directly to me by email at grrrwaaa at gmail dot com. 
 
 Make sure your patcher is commented with:
 
 - Your name
 - The date
-- A description of what it does (or should do)
-- A description of how to use it (what interaction there is)
+- A description of what it does (or should do) or how to use it
 
 Remember you can create comments by adding a [comment] object (you can create comment objects by pressing the 'c' key). 
 
 Please send me your Max file by selecting the whole max patcher (select all, or command-A), then choosing File->Copy Compressed to copy it to your clipboard, then paste into your email. Include your student ID number in the email subject. 
-
-> You can paste compressed patchers back into Max using File -> New From Clipboard.
-
-It will look something like this:
-
-```
-<pre><code>
-----------begin_max5_patcher----------
-680.3ocyW97aZCCEG+b3uBKelgriARC2lzjl1gIMocXGlppbRLfaSribb5fU
-0+2msSRaf0zAIYzdf.9wy1eeez6GvCS7fQxcrBHXE3m.OuGl344LYM3Uu1Cl
-Q2EmRKbtAikYYLgFNs56zrcZm8uqoJMHZOPWpDBtXCPJ.5s7BfVtYSJqYCob
-AKVVJb6xu1nnLSVpSYZ2cfpslS0waMmzMJVrtRi9KCmglBtJX1ho.7BjcAgL
-CAttdOqkBcA+2Lq6X+YMGEOwIRYzseXArkqBZlyU3GUbZJ7Y4vEMpA23tZSj
-ScOcn4JVgAETMWJZoQbfUUgKrOQ0O.Wa2xiSlXeLcfn9aoz8E.EUjHy.4LUb
-YQgQByfmMMwV4E3TZML8QmELw+ugYsDCGLLEreYD7ewxZJh8CdY50H3JS584
-rJcA41L3q6lsD+qbXMnEiOW3RNS55OdbQH0LSLCvnyOqZNwErDWcvxf9D49m
-YjSFuHOidGyF8lPGYe8xwueW4EqSkTSIayGdsTjFPgbugw8p.D+1QpDUo3Na
-oCfLxEO0joo3Yde.C5MLEhoUxtyc5DKQTwlShKjktRq9zTI7BzS4vI9iaNQ3
-SICGE5shwku5rmbpxD1Zl5FlfFk5tezHNdNgpYq.ektuqxh+4D4ECXh77gOQ
-dDYgU.q.eVQ2Ry.+vzYcMmklzSrPF.VHuqvxW9jovBg8QHDtmv.O.X3Opvvc
-wteW+Q+QBm1s1OjPExRUbSUec4J3Y4mvJzbg62A1xmvC7YKOIgIZyoDdgsVN
-o6h4SUMgmfZrCWtPx4nqpC8fub5AeJ5w+xpG7onG76mzGxkCOjSM8oO3opzm
-lmeOSUTelNoXZCdqTYWtbpaIWTsz0JApX2ya7uxBUYZyoM83JUUci1sbNbh8
-ddbxev+PTOI
------------end_max5_patcher-----------
-</code></pre>
-```
 
 Assignments are due every Wednesday at 3pm. 
 </div>
