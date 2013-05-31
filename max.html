@@ -291,7 +291,72 @@ m2XVZIvyoARt5R2bMeN1bXFgmy+b8+C.77pUE
 </code></pre>
 ```
 
-----
+-----
+
+# Assignment 2: Sonify your mouse
+
+For this assignment you'll make a sonification of the mouse, as a new kind of musical instrument. 
+
+Your instrument should start making sound when the mouse button is pressed, and keep making sound while the mouse is still being pressed. It should stop (or become calm) when the mouse button is released. Whatever sounds it makes, while playing, the sounds should be modulated by the X and Y positions of the mouse.
+
+It will work in the background, so you can keep it running while you do other things during the day :-)
+
+You can use any objects we have seen so far, or try something new! Here's the starter template:
+
+```
+<pre><code>
+----------begin_max5_patcher----------
+2040.3oc0ZsziiaiD9r6eED9R1.3wPTOs6KCxtAA6jiIG1MHyfAzRz1bZYRA
+RptmNAI+12hjRpkrkjezd5s6AXrZyWUUeUUr9Hk+yalLck3qT0TzsneGMYxe
+dyjI1lLMLo56Slti70zbhxNropBZpVJTohB5eOclaD7xcLdNUaGheUiEDc5V
+FeymkvLbhvOJXt2LT7hElGg9dlGQvWPepZRrLqTDq9x678as7hRc85iqZ00j
+9wBpawmNE8ISO+0M2X9X1IZPohc6nbcsrzzuZU1o+jPhzaYJDLP1FtYLnGEk
+eWdNZG4NJhfTBNaMKknYBNRrFFMEAJphNClCzOm9.5NFOyz2tRELxbDiqzxR
+yhMG8Q9G4+lnT1pQjZqnLOCozDo1HG.+.4TBKxCao7mDAZUoVChEzuBIUonY
+fPgQcGkVr+7X4zVSDlgRy.qXE0LnpYOG8gVBWTf9Gf4uhBfCEA58tueX4Ko4
+ThcILFz+YKQSumJcRWgXVyfplUoHE4jGA4NytTUioRtqLqcVYNr.vWdzNh+q
+0p9MTgPwL3rpCPO2HQPwevXOOHj2APos2Ujz61HMq9LPHF+FXEbG5.ZjrjyM
+FuSkL8lIPBXhVWNeiBkUJMCvrVYjGQ29tu+i75PjbFG.lRtMNAG1WN.djb.O
+avu+xXyi.uHyC7xvARB7pk5ZAWyI6rA6S+AIij2e5gW83kaVY+975VVUtZUN
+sPvbZt27kwsVaE6OrqM1uYBlXCHnzFf2xBBVZs.bn+7nY1027wUM46eSk1H0
+Vgs7hRM3KzDjVffV50aDLlyvY+Gy8Da2hZYfw1V5a2mZ.eCdw0y2zwC3cLO.
+F7.wv+7iA2f+hJOv02M7KzczcqLYEBjtTxcaHJ5OSv+Yi83H+FyppFgyCDDL
+fG3amC3Jhh+KAGfIa0CIZMiCkALUTH4vtibCxBA4qYRktJHG1gKMmUb6s8By
+gOaXd4bbEHGsvF13f5nn9A4vkeyCycpshkY6H3BvdnVKnqG.8Fb7uQuCiv8R
+UIXDPpEJsLwrYPrEq78F.kN6MCviu46AzabwLWFImKjtVhMvHN.ar+fk1RU.
+EtnF.XU45ZUON7PPIva7.DfYQZSf8hKvtxY2Smugv3M118DYC3eXumZQ5Vd+
+JqGG3pWOPRBd.KMrQFRPqzT4mobxdonBIqdO91MCrhdn1TZ.rsDXuj7gieBN
+Z7yLfnL7+04Bh17G4LEXzeZ7BNIVWu6yHuC.BE4dZ1mIZsjA7BoO8WpJeWky
+y3dxKoh00MW2da.pVkqLjN8w3.KPR9gfXmQAHmTObTPmwlK3aNwgVBBWoezI
+2vdFvNH1zlJL2q2dYV+66R7lOhs4.bHfxknWkRT+3LyOn+QFIsI5uPJzBC71
+Xvao4EqANvm6NCsyOVDZxOLjjFlpjOd7MBxEoNKuoP1lTQtPVwKvR2r8GOsA
+jPlQsCCOOIpSisV.u4Qd3kw3Y89W3qLqoOXODwcNxRsNaGSMe97ycmnPOa5V
+nkUZ.NxPPJAu.z5AN1LN5MAoHfIO8VzOWxonnyESvNzv8I1Ow9XH3H9MAbXT
+raQu+8u+bwB+jVwG3.uwvh2FQFe3Ggsd7.SA92YGYD0NvXwnAFIuIPie0bIS
+O5N6f6NON+8PbnB1RfIJbokFax.zX8GFUP+SQdF5CZRNK8YgPKtHDZ.J9ENX
+wby.8hKdGCWRrUtvIVR9CQuGGdtQKAmI8dysxLqyimHkYTcWUt1boLEtumJU
+c4MNYJonnUycoYsi7EWQw3FFH.V4Z5IpTR58r5462zJQB.nFPuRoy5+5h3o0
+bTpE99bFwXa7VbnaapEsvWSUdnv+czr1z8lBmTgCGDtEQzNcmQWSJy0etebs
+a+qIozAmbuNwIS2HYYBtQI5LSSy0hqIiJpswXGAmTzyjUfcTpVQjFXsh3ZMt
+NUKD4c6pwSBIDDNaGTpTybJquWyhx1UHquJu51b7h2pRkh77NKkqm66omLvY
+mRefko21Im0zCLbVQsKXZCFkw1PU5tsoIaTcaoy6VncTX6L8NsOVFe2rdfxr
+TfZtczAIuNTpu6PLUbGhVr+I62O8eQa4LbvyfGxejcB5e2fUD9lo0m.n4L.0
+aWdkAS3nfY6nJUysjLX0ki.mNtpI9GCNSdogyWLnzVKxjtSelPYjspTRvwfR
+7kBkQWHTdXcp8qZcEQZmzedPoefEJ8ip+bPnDOLZ0FRpopY2r6Uiw5duEmtw
+5+V1XSRNOiM35XrOUr2bk7CTayptl96GET.S9z5jopZKntZNT2Uy3MTe98lL
+88F2VVVVWlFthyJSodGopSxictZbxIpwKd0nw3SEiwupTY7onx9upTY+SQkC
+tRpbUsl5SeTcOzfHfMJF4RnetGQ33GA4L3M2qRLhvGRnvQoVQxqNpXyb6gd9
+keaxZwlMCbWwG+1G7r+ZAfiAV8YemxNd72TVeuDkQOO8EcstqyEf3O62XT3b
+eyqIxcKKI1e9.CdIKm6cI3eB.v92vxP3RyK9o5HFi+he7Wtzc2QIO6ejAWFt
+hcPYMt5OFtF7ZBWagPVcsKkAGfs+FrUv1AarF1oR5.6p52oPvg6nNcGKy9i+
+oRIvdO8iHIFXOYBe8is.r6qOIu82F9.O+U0PLu03migXriEI01w+2LC7wLiq
+m9rmnFH9.+JTevuL5S3InOwubvSXGKue0I7kUc7OVR4EpNt8916JoMZxdWE8
+dWC8gWA8PW+LHm+5l+GfuW6T7
+-----------end_max5_patcher-----------
+</code></pre>
+```
+
+-----
 
 # Submitting your work
 
