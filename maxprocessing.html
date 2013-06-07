@@ -24,7 +24,7 @@ A guide to markdown syntax is at http://daringfireball.net/projects/markdown/
 
 We'll connect Processing and Max by using network messages, which are structured using the OSC protocol. The basic form of the OSC protocol sends messages as a pathname (a string with ```/``` slashes, e.g. ```/foo/bar```) followed by a list of arguments (which can be ints, floats and strings).
 
-First however we need to install an extension library for Processing to add OSC support. [Download the oscP5 library from here](http://www.sojamo.de/libraries/oscP5/). Unzip this file and copy the ```oscP5``` directory it contains into the ```libraries``` subdirectory of the ```Processing``` directory. (On OSX this is in ```Documents/Processing/libraries```, on Windows it is ...?)
+First however we need to install an extension library for Processing to add OSC support. From inside Processing, go to the Sketch menu, select "Add Library", and in the window that opens search for "P5". Select & install this library.
 
 Max has enough objects built-in for us to get started with OSC without needing to download anything. 
 
