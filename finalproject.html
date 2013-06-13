@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Final Project</title>
+    
+<link href="css/site.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/highlight.default.css" media="screen" rel="stylesheet" type="text/css" />
+  
+<script src="js/jquery.js"></script>
+<script src="js/showdown.js" type="text/javascript"></script>
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<!--
+Write the markdown code below.
+A guide to markdown syntax is at http://daringfireball.net/projects/markdown/
+-->
+
+<div style="display: none" id="sourcetext">
+
+# Final Project
+
+Your final project will be an interactive audio-visual artwork using both Processing and Max/MSP. Your final submission will be a Processing sketch and a Max patch, both of which communicate using the OSC protocol, and a brief artist's statement describing your creative aims.
+
+## Processing component
+
+You are welcome to use an existing Processing assignment (e.g. ANTustrators, SOclock), or Pong ([you can get the Pong code here](https://github.com/jiharu/ant3010/blob/master/pong/pong.pde)), for the interactive visual component. Or you can create a new Processing sketch if you wish (e.g. a virtual instrument interface).
+
+You will need to extend this Processing sketch to send OSC messages to Max ([as described here](maxprocessing.html)). Your sketch should send **at least two different OSC messages for different events**; at least one of these must be interactive (in response to mouse or keyboard).
+
+For example: 
+
+- ANTustrator could send one message while drawing a line (arguments of X and Y position), and another message when a line is finished.
+- SOclock could send one message each time the second changes (arguments of current time), and one message when the mouse moves (arguments of modified time).
+- Pong could send a message for paddle collisions (arguments of paddle position, ball speed), one for ball collisions with the wall (arguments of ball position), one for scoring a point (arguments of player scores), etc.
+
+## Max component
+
+Your Max patch will add a continuous *soundtrack* and at least two *sound effects* to the Processing sketch. You can use previous Max assignments or examples given in class as materials to build your soundtrack and sound effects. 
+
+### Sound effects
+
+Your Max patch must receive the OSC messages from Processing ([as described here](maxprocessing.html)). Each different message should trigger a different sound effect. **Each sound effect should be modulated according to the message arguments.** Sound effects should be brief and convey the meaning of the interactive/visual event. 
+
+### Soundtrack
+
+The soundtrack should run continuously in the background; however it could also be modulated by one of the OSC messages received from Processing. For example, it could be a rhythmic pulse whose tempo increases as the Pong ball speed increases (building the tension!)
+
+Remember to add ```[loadmess]``` objects in your Max patch to initialize any number boxes in your patch (make sure the Max patch still works as you want it to, by closing it and re-opening it).
+
+## Evaluation
+
+Assignment and projects will be graded according to:
+
+- Technical proficiency (33%). The project should *work* according to the specification above. Did you satisfy all the requirements? It should also display your understanding of how the whole system works, e.g. using parameters from the Processing sketch intelligently through OSC messages to modulate the sound synthesis in a complex and useful manner. More generally, the code and patch should be well formatted, with comments present and usefully descriptive, and code or objects that do nothing should be removed.
+- Aesthetic quality (33%). Do the Max sound effects and soundtrack fit together naturally? Do they feel coherent with the Processing images (do they intensify the meaning of the sketch rather than distracting from it)? Do the sounds remain interesting over time? Does the project feel like an integrated whole? Does it match your artist statement intentions? 
+- Novel contribution (33%). How much further did you take the Max sound design beyond previous assignments? Are your choices inventive rather than repetitive? How unique is your idea or your work?
+
+-----
+
+## Submitting your work
+
+Please submit both the Processing sketch and the Max patch, and any other files it needs to run. Make sure to test that the files in sent are enough for the project to work (e.g. copy them to another location on disk and try running them again). Remember to add ```[loadmess]``` objects in your Max patch to initialize any number boxes in your patch (make sure the Max patch still works as you want it to, by closing it and re-opening it).
+
+Submit your files directly to me by email at grrrwaaa at gmail dot com. Make sure your email is commented with:
+
+- Your student ID
+- Your name
+- An artist's statement regarding your choices in the soundtrack and sound effects (100-300 words)
+- Let us know if you want feedback in the final class
+
+The final project is due on Wednesday June 19 (midnight). 
+
+</div>
+<div id="wrapper">
+	
+	<div class="header">
+		
+		<h1>ANT3010</h1>		
+		<a href="index.html">Overview</a><br/>
+		<a href="dmaworkshop.pdf">Syllabus</a><br/>
+		<a href="finalproject.html">Final Project</a><br/>
+		<br/>
+		<a href="processing.html">Processing</a><br/>
+		<br/>
+		<a href="max.html">Max/MSP/Jitter</a><br/>
+		<br/>
+		<a href="maxprocessing.html">Processing to Max</a><br/>
+	</div>
+	<div class="section">
+		<script type="text/javascript">
+		//var converter = new Markdown.Converter();
+		var converter = new Showdown.converter();
+		document.write(converter.makeHtml($('#sourcetext').text()));
+		</script>
+	</div>
+	
+	<div class="footer">Haru Ji & Graham Wakefield, 2013</div>
+	
+</div>
+</body>
+</html>
