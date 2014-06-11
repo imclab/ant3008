@@ -46,17 +46,18 @@ Your final-term grade criteria: (Essay (30)) + (Team presentations (30) + 60 to 
 	- 미디어아트: 예술의 최전선 / 진중권/ 휴머니스트
 	
 ## 2. Presentation
-- Team presentation should include a brief artist's statement describing your creative aims as well as a 60 to 90 seconds video of your final project.	
+- Team presentation should include a brief **artist's statement / problem statement** describing your creative aims as well as a 60 to 90 seconds video of your final project.	
 - Date: June 18th 4:30 pm
 - Presentation order (each team has 10 mins including the video):
 	- Projection mapping on boxes
+	- Media art work based on the research - perception
 	- Projection mapping for the performance
+	- Immersive virtual world with the Oculus Rift	
 	- Street mapping
 	- Multi modal sonification
-	- Immersive virtual world with the Oculus Rift
-	- Media art work based on the research - perception
-- Grading criteria will include 1. aesthetic quality, 2. technical proficiency (limited to your milestone), and 3. novel contribution. Plus, the depth, clarity, and [punctum](http://en.wikipedia.org/wiki/Camera_Lucida_(book)) of your interpretation to the theme and subject will be considered too.
-	- Check [Studium vs Punctum](http://visualexploration-sophierabey.blogspot.kr/2012/04/studium-vs-punctum.html) from Roland Barthes book 'Camera Lucida'
+
+- Grading criteria will include 1. aesthetic quality, 2. technical proficiency (limited to your milestone), and 3. novel contribution. Plus, the depth, clarity, and ***punctum*** of your interpretation to the theme and subject will be considered too.
+	- Check [Studium vs Punctum](http://visualexploration-sophierabey.blogspot.kr/2012/04/studium-vs-punctum.html) from Roland Barthes book [Camera Lucida](http://en.wikipedia.org/wiki/Camera_Lucida_(book)), and [its criticism](http://anthropovisuality.wordpress.com/2013/02/02/shut-up-barthes/).
 	
 ## 3. General participation/collaboration	
 - In the presentation, it should be made clear how each team member contributed to the project.
@@ -66,6 +67,71 @@ Your final-term grade criteria: (Essay (30)) + (Team presentations (30) + 60 to 
 - Submit your final presentation & video file to yoon\_goo@naver.com by June 18 12pm 
 
 -----------------------
+
+
+Here's a Precessing example for the team 'Projection mapping for the performance':
+
+```java
+PFont myFont;
+String data[] = { "한", "글" };
+
+void setup() {
+ size( 500, 500, P3D);
+ background( 0 );
+ myFont = createFont("Courier", 64, false);
+ textFont(myFont);
+}
+
+void draw() {
+ clear();
+ fill(255);
+ int dlen = data.length;
+ int dim = (int)sqrt(dlen);
+ float tsize = width / dim;
+ textSize(tsize);
+
+ for (int y = 0; y < dim; y++) {
+   for (int x=0; x < dim; x++) {
+    text(data[x + y*dim], x*tsize, (y+1)*tsize); 
+   }
+ }
+
+ if (data.length > 128) {
+    data = new String[0];
+ }
+ if ((int)random(2) == 1) {
+   data = append(data, "한");
+ } else {
+   data = append(data, "글");
+ }
+}
+```
+
+-----------------------
+
+
+Here's a Max/MSP/Jitter object / reference for the team 'Immersive virtual world with the Oculus Rift':
+
+## Skeleton tracking in Max/MSP/Jitter (Windows only)
+
+## dp.kinect [link](https://github.com/diablodale/dp.kinect/wiki)
+### Major Features
+- Image and depth sensor output in several formats, sizes, extended ranges, etc.
+- User/player identification, location, and occlusion
+- Skeleton joint tracking with orientations
+- Face tracking
+- Speech recognition and sound position location
+- Data available in native Max route format or OSC
+- Multiple Kinects supported simultaneously
+- Near mode, seated mode, IR emitter, and color camera control supported on Kinect for Windows sensors
+- Data filtering, smoothing, rotation to gravity, synchronization
+- Accelerometer readings and tilt motor control
+- Two levels of error messages to aid in debugging
+- Output is very compatible with the output of jit.openni to aid in migration
+
+-----------------------
+
+
 </div>
 <div id="wrapper">
 	
